@@ -19,10 +19,11 @@ app.get("/", function(req, res) {
 
     const pool = new mssql.ConnectionPool(config);
     pool.connect().then(() => {
-        pool.request().query("SELECT * FROM Users", function(err, recordset) {
+        pool.query("INSERT INTO dbo.Users (UserID, FirstName, LastName, Age, Phone, Email, Gender) VALUES ('4', 'sdfsdfs', 'sdfsdf', '66', 'sdfsdfsdf', 'sdfsdfsdf', 'sdfsdfsdf')");
+        pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
             if (err) res.send(err);
             else {
-                res.send(recordset);
+                res.send(result.recordset);
             }
         });
     });
