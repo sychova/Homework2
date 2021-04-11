@@ -17,7 +17,7 @@ function getUsers(req, res) {
             if (err) {
                 res.send(err);
             } else {
-                res.send(result);
+                res.send(result.recordset);
                 res.sendStatus(200);
             }
         });

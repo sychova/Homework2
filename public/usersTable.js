@@ -4,15 +4,28 @@ var UsersTable = function(tableId, headers) {
     this.getUsers = function() {
         fetch("/getUsers")
             .then(function(res) {
-                res.text().then(function(text) {
-
-                });
                 if (res.ok) {
                     console.log("OK");
-                    return res;
+                    let json = res.json();
+                    console.log(json);
                 }
             });
     };
+
+
+
+    // this.getUsers = function () {
+    // 	var keys = Object.keys(localStorage);
+    // 	var usersList = [];
+    // 	for (i of keys) {
+    // 		var objectUser = JSON.parse(localStorage.getItem(i));
+    // 		usersList.push(objectUser);
+    // 	}
+    // 	return usersList;
+    // };
+
+
+
     this.createTable = function(onInitialized) {
         var headers = this.getHeaders(this.headers);
         var rows = this.getRows();
