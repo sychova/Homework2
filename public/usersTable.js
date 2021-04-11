@@ -1,14 +1,57 @@
-var UsersTable = function(tableId, headers) {
+var UsersTable = function(tableId) {
     this.tableId = tableId;
     this.headers = headers;
     this.getUsers = function() {
-        var keys = Object.keys(localStorage);
-        var usersList = [];
-        for (i of keys) {
-            var objectUser = JSON.parse(localStorage.getItem(i));
-            usersList.push(objectUser);
-        }
-        return usersList;
+        fetch("/getUsers", { method: "GET" })
+            .then(function(res) {
+                if (res.ok) {
+                    console.log("OK");
+                    return;
+                }
+            });
+
+
+
+
+
+        // var keys = Object.keys(localStorage);
+        // var usersList = [];
+        // for (i of keys) {
+        //     var objectUser = JSON.parse(localStorage.getItem(i));
+        //     usersList.push(objectUser);
+        // }
+        // return usersList;
+
+
+
+        //     fetch('/clicked', {method: 'POST'})
+        //     .then(function(response) {
+        //       if(response.ok) {
+        //         console.log('click was recorded');
+        //         return;
+        //       }
+        //       throw new Error('Request failed.');
+        //     })
+        //     .catch(function(error) {
+        //       console.log(error);
+        //     });
+        // });
+
+
+        //         fetch('https://jsonplaceholder.typicode.com/users')
+        //     .then(res => res.json())
+        //     .then(json => {
+        //         console.log("First user in the array:");
+        //         console.log(json[0]);
+        //         console.log("Name of the first user in the array:");
+        //         console.log(json[0].name);
+        // })
+
+
+
+
+
+
     };
     this.createTable = function(onInitialized) {
         var headers = this.getHeaders(this.headers);

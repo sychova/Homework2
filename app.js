@@ -4,43 +4,33 @@ const mssql = require("mssql/msnodesqlv8");
 
 app.use(express.static('public'));
 
-// app.get("/", function(req, res) {
-//     require("msnodesqlv8");
+app.get("/getUsers", function(req, res) {
+    require("msnodesqlv8");
 
-//     const config = {
-//         server: "(LocalDB)\\MSSQLLocalDB",
-//         database: "Homework2",
-//         port: "1433",
-//         driver: "msnodesqlv8",
-//         options: {
-//             trustedConnection: true
-//         }
-//     };
+    const config = {
+        server: "(LocalDB)\\MSSQLLocalDB",
+        database: "Homework2",
+        port: "1433",
+        driver: "msnodesqlv8",
+        options: {
+            trustedConnection: true
+        }
+    };
 
-//     console.log("Starting");
-
-//     const pool = new mssql.ConnectionPool(config);
-//     pool.connect().then(() => {
-//         // pool.query("INSERT INTO dbo.Users (UserID, FirstName, LastName, Age, Phone, Email, Gender) VALUES ('4', 'sdfsdfs', 'sdfsdf', '66', 'sdfsdfsdf', 'sdfsdfsdf', 'sdfsdfsdf')");
-//         pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
-//             if (err) res.send(err);
-//             else {
-//                 res.send(result.recordset);
-//             }
-//         });
-//     });
-//     mssql.close();
-// });
-
-// Showing pages
-// app.get("/", function(req, res) {
-//     res.send("Hello world!");
-// })
-
-app.post("/clicked", function(req, res) {
-    console.log("Your click was received!");
-    res.sendStatus(200);
-})
+    const pool = new mssql.ConnectionPool(config);
+    pool.connect().then(() => {
+        pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
+            if (err) {
+                console.log("sdfsdf");
+                res.send(err);
+            } else {
+                res.send(JSON.stringify(result));
+                res.sendStatus(200);
+            }
+        });
+    });
+    mssql.close();
+});
 
 app.get("/", function(req, res) {
     res.sendFile(__dirname + "/public/index.html");

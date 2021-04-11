@@ -1,21 +1,3 @@
-// (function() {
-//     var button = document.getElementById("newUser");
-//     button.addEventListener("click", function(e) {
-//         console.log("I clicked the button");
-//         var userModal = new UsersModal();
-//         console.log(userModal);
-//         fetch("/clicked", { method: "POST" })
-//             .then(function(response) {
-//                 if (response.ok) {
-//                     console.log("Click was recorded!");
-//                     return;
-//                 }
-//             });
-//     });
-// }());
-
-const UsersTable = require("/userTable");
-
 (function() {
     var initEvents = function() {
         document.getElementById("newUser").addEventListener("click", function() {
@@ -89,7 +71,7 @@ const UsersTable = require("/userTable");
     }
     initEvents();
     var tableHeaders = ["First Name", "Last Name", "Age", "Phone", "Email", "Gender", "Management"];
-    var usersTable = new UsersTable("usersTable", tableHeaders);
+    var usersTable = new UsersTable("usersTable");
     usersTable.createTable(initTableEvents);
     var userModal = new UsersModal();
 }());
