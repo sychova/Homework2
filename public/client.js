@@ -71,7 +71,7 @@
     }
     initEvents();
     var tableHeaders = ["First Name", "Last Name", "Age", "Phone", "Email", "Gender", "Management"];
-    var usersTable = new UsersTable("usersTable");
+    var usersTable = new UsersTable("usersTable", tableHeaders);
     usersTable.createTable(initTableEvents);
     var userModal = new UsersModal();
 }());

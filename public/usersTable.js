@@ -1,57 +1,17 @@
-var UsersTable = function(tableId) {
+var UsersTable = function(tableId, headers) {
     this.tableId = tableId;
     this.headers = headers;
     this.getUsers = function() {
-        fetch("/getUsers", { method: "GET" })
+        fetch("/getUsers")
             .then(function(res) {
+                res.text().then(function(text) {
+
+                });
                 if (res.ok) {
                     console.log("OK");
-                    return;
+                    return res;
                 }
             });
-
-
-
-
-
-        // var keys = Object.keys(localStorage);
-        // var usersList = [];
-        // for (i of keys) {
-        //     var objectUser = JSON.parse(localStorage.getItem(i));
-        //     usersList.push(objectUser);
-        // }
-        // return usersList;
-
-
-
-        //     fetch('/clicked', {method: 'POST'})
-        //     .then(function(response) {
-        //       if(response.ok) {
-        //         console.log('click was recorded');
-        //         return;
-        //       }
-        //       throw new Error('Request failed.');
-        //     })
-        //     .catch(function(error) {
-        //       console.log(error);
-        //     });
-        // });
-
-
-        //         fetch('https://jsonplaceholder.typicode.com/users')
-        //     .then(res => res.json())
-        //     .then(json => {
-        //         console.log("First user in the array:");
-        //         console.log(json[0]);
-        //         console.log("Name of the first user in the array:");
-        //         console.log(json[0].name);
-        // })
-
-
-
-
-
-
     };
     this.createTable = function(onInitialized) {
         var headers = this.getHeaders(this.headers);
@@ -64,28 +24,9 @@ var UsersTable = function(tableId) {
 		`
         var tableDiv = document.getElementById("usersTable");
         tableDiv.innerHTML = table;
-
-
-
-
-
-        // var initialElement = document.getElementById("usersTable");
-        // var usersTable = document.createElement("table");
-        // usersTable.classList.add("table");
-        // usersTable.id = "usersTable";
-        // initialElement.parentNode.replaceChild(usersTable, initialElement);
-        // usersTable.appendChild(headers);
-        // usersTable.appendChild(rows);
         if (onInitialized) {
             onInitialized();
         }
-
-
-
-
-
-
-
     }
     this.getHeaders = function(tableHeaders) {
         var headers = "<tr>";
