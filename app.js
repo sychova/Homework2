@@ -2,33 +2,35 @@ const express = require("express");
 const app = express();
 const mssql = require("mssql/msnodesqlv8");
 
-app.get("/", function(req, res) {
-    require("msnodesqlv8");
+app.use(express.static('public'));
 
-    const config = {
-        server: "(LocalDB)\\MSSQLLocalDB",
-        database: "Homework2",
-        port: "1433",
-        driver: "msnodesqlv8",
-        options: {
-            trustedConnection: true
-        }
-    };
+// app.get("/", function(req, res) {
+//     require("msnodesqlv8");
 
-    console.log("Starting");
+//     const config = {
+//         server: "(LocalDB)\\MSSQLLocalDB",
+//         database: "Homework2",
+//         port: "1433",
+//         driver: "msnodesqlv8",
+//         options: {
+//             trustedConnection: true
+//         }
+//     };
 
-    const pool = new mssql.ConnectionPool(config);
-    pool.connect().then(() => {
-        // pool.query("INSERT INTO dbo.Users (UserID, FirstName, LastName, Age, Phone, Email, Gender) VALUES ('4', 'sdfsdfs', 'sdfsdf', '66', 'sdfsdfsdf', 'sdfsdfsdf', 'sdfsdfsdf')");
-        pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
-            if (err) res.send(err);
-            else {
-                res.send(result.recordset);
-            }
-        });
-    });
-    mssql.close();
-});
+//     console.log("Starting");
+
+//     const pool = new mssql.ConnectionPool(config);
+//     pool.connect().then(() => {
+//         // pool.query("INSERT INTO dbo.Users (UserID, FirstName, LastName, Age, Phone, Email, Gender) VALUES ('4', 'sdfsdfs', 'sdfsdf', '66', 'sdfsdfsdf', 'sdfsdfsdf', 'sdfsdfsdf')");
+//         pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
+//             if (err) res.send(err);
+//             else {
+//                 res.send(result.recordset);
+//             }
+//         });
+//     });
+//     mssql.close();
+// });
 
 // Showing pages
 // app.get("/", function(req, res) {
@@ -37,13 +39,12 @@ app.get("/", function(req, res) {
 
 app.post("/clicked", function(req, res) {
     console.log("Your click was received!");
+    res.sendStatus(200);
 })
 
-app.get("/siski", function(req, res) {
-    res.sendFile(__dirname + "/indexx.html");
+app.get("/", function(req, res) {
+    res.sendFile(__dirname + "/public/index.html");
 })
-
-// myfirstmodule.log("pizdec");
 
 app.listen(3000, function() {
     console.log("Listening on port 3000");
