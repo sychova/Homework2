@@ -6,12 +6,20 @@ var UsersTable = function(tableId, headers) {
             .then(function(res) {
                 if (res.ok) {
                     console.log("OK");
-                    let json = res.json();
-                    console.log(json);
+                    console.log(res.json());
                 }
             });
     };
 
+
+
+    // isValidEmail("mail@gmail.com")
+    //     .then((result) => {
+    //         console.log(result);
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     })
 
 
     // this.getUsers = function () {
