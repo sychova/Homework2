@@ -10,19 +10,4 @@ const config = {
     }
 };
 
-function getUsers(req, res) {
-    const pool = new mssql.ConnectionPool(config);
-    pool.connect().then(() => {
-        pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.send(result.recordset);
-                res.sendStatus(200);
-            }
-        });
-    });
-    mssql.close();
-};
-
-module.exports.getUsers = getUsers;
+module.exports.config = config;

@@ -1,15 +1,16 @@
 var UsersTable = function(tableId, headers) {
     this.tableId = tableId;
     this.headers = headers;
-    this.getUsers = function() {
-        fetch("/getUsers")
-            .then(function(res) {
-                if (res.ok) {
-                    console.log("OK");
-                    console.log(res.json());
-                }
-            });
-    };
+    // this.getUsers = function() {
+    //     fetch("/getUsers")
+    //         .then(function(res) {
+    //             if (res.ok) {
+    //                 console.log("OK");
+    //                 var ttt = res.json();
+    //                 console.log(ttt);
+    //             }
+    //         });
+    // };
 
 
 
