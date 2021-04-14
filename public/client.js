@@ -1,11 +1,11 @@
 (function() {
     var initEvents = function() {
-        document.getElementById("newUser").addEventListener("click", function() {
-            userModal.open(initModalEvents, "New", function() {
-                document.getElementById("addUser").hidden = false;
-                document.getElementById("updateUser").hidden = true;
-            });
-        });
+        // document.getElementById("newUser").addEventListener("click", function() {
+        //     userModal.open(initModalEvents, "New", function() {
+        //         document.getElementById("addUser").hidden = false;
+        //         document.getElementById("updateUser").hidden = true;
+        //     });
+        // });
     }
     var initTableEvents = function() {
         var userEdit = document.getElementsByClassName("editUser");
@@ -70,8 +70,5 @@
         }
     }
     initEvents();
-    var tableHeaders = ["First Name", "Last Name", "Age", "Phone", "Email", "Gender", "Management"];
-    var usersTable = new UsersTable("usersTable", tableHeaders);
-    usersTable.createTable(initTableEvents);
     var userModal = new UsersModal();
 }());
