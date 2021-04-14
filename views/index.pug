@@ -6,10 +6,16 @@ head
 h1.tableHeader User management
 div
   button#newUser.btn.btn-primary Add User
-each user in users
-    tr
-    th 
-    tr
+table
+  tr
+    th First Name
+    th Last Name
+    th Age
+    th Phone
+    th Email
+    th Gender
+    th(colspan='2') Management
+  tr
     td user.FirstName
     td user.LastName
     td user.Age
@@ -17,12 +23,9 @@ each user in users
     td user.Email
     td user.Gender
     td
-        button.editUser.btn.btn-primary(data-userid='${usersList[i].Id}') Edit
-        button.deleteUser.btn.btn-danger(data-userid='${usersList[i].Id}') Delete
+      button.editUser.btn.btn-primary(data-userid='${usersList[i].Id}') Edit
+      button.deleteUser.btn.btn-danger(data-userid='${usersList[i].Id}') Delete
 #usersModal
 script(src='usersTable.js')
 script(src='usersModal.js')
 script(src='client.js')
-
-
-var tableHeaders = ["First Name", "Last Name", "Age", "Phone", "Email", "Gender", "Management"];

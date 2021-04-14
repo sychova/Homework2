@@ -7,7 +7,7 @@ app.use(express.static('public'));
 
 app.get("/getUsers", function(req, res) {
     var users = usersList.getUsers;
-    res.render("index.pug", { users: users });
+    res.render("index.pug");
 });
 
 
