@@ -1,11 +1,10 @@
 (function() {
     var initEvents = function() {
-        // document.getElementById("newUser").addEventListener("click", function() {
-        //     userModal.open(initModalEvents, "New", function() {
-        //         document.getElementById("addUser").hidden = false;
-        //         document.getElementById("updateUser").hidden = true;
-        //     });
-        // });
+        document.getElementById("newUser").addEventListener("click", function() {
+            document.getElementById("modal-title").innerHTML = "New User";
+            document.getElementById("addUser").hidden = false;
+            document.getElementById("updateUser").hidden = true;
+        });
     }
     var initTableEvents = function() {
         var userEdit = document.getElementsByClassName("editUser");

@@ -4,11 +4,10 @@ const usersList = require("./usersTableServer");
 
 app.use(express.static('public'));
 
-app.get("/getUsers", usersList.getUsers);
+app.get("/", usersList.getUsers);
 
-
-app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/public/index.html");
+app.get("/delete/:userID", function(req, res) {
+    usersList.deleteUser(req.params.userID, res);
 });
 
 app.listen(3000, function() {

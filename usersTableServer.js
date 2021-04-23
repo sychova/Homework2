@@ -1,16 +1,29 @@
 const mssql = require("mssql/msnodesqlv8");
 const dbConfig = require("./dbconfig");
 
+const pool = new mssql.ConnectionPool(dbConfig.config);
+
 function getUsers(req, res) {
-    const pool = new mssql.ConnectionPool(dbConfig.config);
-    pool.connect().then(() => {
-        pool.request().query("SELECT * FROM dbo.Users", function(err, result) {
+    pool.connect(() => {
+        var sql = "SELECT * FROM dbo.Users";
+        pool.query(sql, function(err, result) {
             console.log(result.recordset);
-            let ttt = result.recordset;
-            res.render("index.pug", { users: ttt });
+            res.render("index.pug", { users: result.recordset });
         });
+        mssql.close();
     });
-    mssql.close();
+};
+
+function deleteUser(req, res) {
+    pool.connect().then(() => {
+        var sss = "SELECT * FROM dbo.Users WHERE UserID=" + parseInt(req);
+        pool.query(sss, function(err, result) {
+            console.log(result.recordset);
+            res.render("index.pug", { users: result.recordset });
+        });
+        mssql.close();
+    });
 };
 
 module.exports.getUsers = getUsers;
+module.exports.deleteUser = deleteUser;

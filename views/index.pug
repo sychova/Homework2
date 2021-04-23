@@ -1,7 +1,7 @@
 doctype html
 head
   title User management
-  link(rel='stylesheet' type='text/css' href='style.css')
+  link(rel='stylesheet' type='text/css' href='/style.css')
   link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous')
 body
   h1.tableHeader User management
@@ -29,19 +29,44 @@ body
           td
             button.editUser.btn.btn-primary(data-userid='${usersList[i].Id}') Edit
             button.deleteUser.btn.btn-danger(data-userid='${usersList[i].Id}') Delete
-  #usersModal.modal(tabindex='-1' role='dialog')
+  #usersModal.modal(tabindex='-1' role='dialog' aria-labelledby='usersModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h5.modal-title Modal title
+          h4#modal-title
           button.close(type='button' data-dismiss='modal' aria-label='Close')
             span(aria-hidden='true') &times;
         .modal-body
-          p Modal body text goes here.
+          form#userForm(method='POST')
+            .form-group
+              label(for='FirstName') Please enter First Name:
+              input#FirstNameI.form-control(type='text' name='FirstName' placeholder='John' required='' minlength='5' maxlength='30')
+            .form-group
+              label(for='LastName') Please enter Last Name:
+              input#LastNameI.form-control(type='text' name='LastName' placeholder='Doe' required='' minlength='5' maxlength='30' value='Sychova')
+            .form-group
+              label(for='Age') Please enter your age:
+              input#AgeI.form-control(type='number' name='Age' placeholder='333' required='' min='18' value='18')
+            .form-group
+              label(for='Phone') Please enter your phone:
+              input#PhoneI.form-control(type='text' name='Phone' placeholder='(29)321 65 75' required='' pattern='^[(]{0,1}[0-9]{2,2}[)]{0,1}[0-9]{3,3}\\s[0-9]{2,2}\\s[0-9]{2,2}$' minlength='12' maxlength='30' value='(29)321 65 75')
+            .form-group
+              label(for='Email') Please enter your email:
+              input#EmailI.form-control(type='text' name='Email' placeholder='john.doe@gmail.com' required='' pattern='\\S+@\\S+\\.\\S+' value='anastasiya.sychova@gmail.com')
+            .form-group
+              label(for='Gender') What is your gender
+              select#GenderI.form-control(name='Gender')
+                option(value='Female') Female
+                option(value='Male') Male
+                option(value='Transgender female') Transgender female
+                option(value='Transgender male') Transgender male
         .modal-footer
-          button.btn.btn-primary(type='button') Save changes
-          button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+          span.validationWarning
+          button#addUser.btn.btn-success(data-dismiss='modal') Add
+          button#updateUser.btn.btn-success(data-dismiss='modal') Save
+          button#formReset.btn.btn-secondary Reset
+          button.btn.btn-link.modal-close(data-dismiss='modal') Close
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
 script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
-script(src='usersModal.js')
-script(src='client.js')
+script(src='/usersModal.js')
+script(src='/client.js')
