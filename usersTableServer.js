@@ -16,10 +16,18 @@ function getUsers(req, res) {
 
 function deleteUser(req, res) {
     pool.connect().then(() => {
-        var sss = "SELECT * FROM dbo.Users WHERE UserID=" + parseInt(req);
-        pool.query(sss, function(err, result) {
+        var sql = "DELETE FROM dbo.Users WHERE UserID=" + parseInt(req);
+        pool.query(sql);
+        mssql.close();
+    });
+};
+
+function editUser(req, res) {
+    pool.connect().then(() => {
+        var sql = "SELECT * FROM dbo.Users WHERE UserID=" + parseInt(req);
+        pool.query(sql, function(err, result) {
             console.log(result.recordset);
-            res.render("index.pug", { users: result.recordset });
+            res.send(result.recordsets);
         });
         mssql.close();
     });
@@ -27,3 +35,4 @@ function deleteUser(req, res) {
 
 module.exports.getUsers = getUsers;
 module.exports.deleteUser = deleteUser;
+module.exports.editUser = editUser;

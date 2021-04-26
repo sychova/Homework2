@@ -6,8 +6,13 @@ app.use(express.static('public'));
 
 app.get("/", usersList.getUsers);
 
-app.get("/delete/:userID", function(req, res) {
-    usersList.deleteUser(req.params.userID, res);
+app.get("/users/:id", function(req, res) {
+    usersList.editUser(req.params.id, res);
+});
+
+app.delete("/users/:id", function(req, res) {
+    res.sendStatus(200);
+    usersList.deleteUser(req.params.id, res);
 });
 
 app.listen(3000, function() {
