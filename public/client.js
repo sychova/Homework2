@@ -18,8 +18,8 @@
         var userEdit = document.getElementsByClassName("editUser");
         for (var i = 0; i < userEdit.length; i++) {
             userEdit[i].addEventListener("click", function() {
-                fetch("/users/" + this.getAttribute("data-userid"), { method: 'GET' }).then((response) => {
-                    console.log(response.json());
+                fetch("/users/" + this.getAttribute("data-userid"), { method: 'GET' }).then((res) => {
+                    console.log(res);
                 });
             });
         }

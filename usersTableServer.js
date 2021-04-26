@@ -27,7 +27,7 @@ function editUser(req, res) {
         var sql = "SELECT * FROM dbo.Users WHERE UserID=" + parseInt(req);
         pool.query(sql, function(err, result) {
             console.log(result.recordset);
-            res.send(result.recordsets);
+            res.send(result.recordset);
         });
         mssql.close();
     });
