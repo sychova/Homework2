@@ -3,15 +3,26 @@ const dbConfig = require("./dbconfig");
 
 const pool = new mssql.ConnectionPool(dbConfig.config);
 
-function getUsers(req, res) {
+function getUsers() {
     pool.connect(() => {
         var sql = "SELECT * FROM dbo.Users";
         pool.query(sql, function(err, result) {
-            console.log(result.recordset);
-            res.render("index.pug", { users: result.recordset });
+            // console.log(result.recordset);
+            // console.log(ttt);
+            var qqq = JSON.stringify(result.recordset);
+            // console.log(qqq);
+            // res.render("index.pug", { users: result.recordset });
+            // res.send(qqq);
+            return qqq;
         });
         mssql.close();
     });
+};
+
+function loadUsersPage(req, res) {
+    var qqq = getUsers();
+    console.log(qqq);
+    // res.render("index.pug", { users: qqq });
 };
 
 function deleteUser(req, res) {
@@ -36,3 +47,4 @@ function editUser(req, res) {
 module.exports.getUsers = getUsers;
 module.exports.deleteUser = deleteUser;
 module.exports.editUser = editUser;
+module.exports.loadUsersPage = loadUsersPage;

@@ -4,7 +4,7 @@ const usersList = require("./usersTableServer");
 
 app.use(express.static('public'));
 
-app.get("/", usersList.getUsers);
+app.get("/", usersList.loadUsersPage);
 
 app.get("/users/:id", function(req, res) {
     usersList.editUser(req.params.id, res);

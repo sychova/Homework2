@@ -10,9 +10,17 @@
         var userDelete = document.getElementsByClassName("deleteUser");
         for (var i = 0; i < userDelete.length; i++) {
             userDelete[i].addEventListener("click", function() {
-                fetch("/users/" + this.getAttribute("data-userid"), { method: 'DELETE' }).then(function() {
-                    document.location.reload();
-                });
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "test.txt", true);
+                xhr.onload = function() {
+                    if (this.status == 200) {
+                        document.getElementById("newUser").innerHTML = this.responseText;
+                    }
+                }
+                xhr.send();
+                // fetch("/users/" + this.getAttribute("data-userid"), { method: 'DELETE' }).then(function() {
+                //     document.location.reload();
+                // });
             });
         };
         var userEdit = document.getElementsByClassName("editUser");
