@@ -5,12 +5,13 @@ const pool = new mssql.ConnectionPool(dbConfig.config);
 
 function getUsers(req, res) {
     pool.connect().then(() => {
-        var sql = "SELECT UserID FROM dbo.Users";
+        var sql = "SELECT * FROM dbo.Users";
         pool.query(sql, function(err, result) {
-            finalArray = result.recordset.map(function(obj) {
-                return obj.UserID;
-            });
-            res.send(finalArray);
+            console.log(result.recordset);
+            // finalArray = result.recordset.map(function(obj) {
+            //     return obj;
+            // });
+            res.send(result.recordset);
         });
         mssql.close();
     });
@@ -47,6 +48,7 @@ function editUser(req, res) {
     pool.connect().then(() => {
         var sql = `SELECT * FROM dbo.Users WHERE UserID=${parseInt(req)}`;
         pool.query(sql, function(err, result) {
+            console.log(result.recordset[0]);
             res.send(result.recordset[0]);
         });
         mssql.close();

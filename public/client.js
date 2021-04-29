@@ -24,7 +24,7 @@
                 document.getElementById("updateUser").hidden = false;
                 document.getElementById("updateUser").setAttribute("data-userid", userID);
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/users/" + this.getAttribute("data-userid"), true);
+                xhr.open("GET", `/users/${this.getAttribute("data-userid")}`, true);
                 xhr.onload = function() {
                     if (this.status == 200) {
                         var userObject = JSON.parse(this.responseText)
@@ -62,17 +62,31 @@
 
         document.getElementById("addUser").addEventListener("click", function() {
             if (userModal.validate()) {
-                var userID = Math.floor(Math.random() * 100).toString();
-                // var isDuplicate = this.responseText.includes(userID);
-                var objectUser = userModal.read();
-                objectUser.Id = userID;
-                var data = JSON.stringify(objectUser);
-                console.log(data);
-                console.log(objectUser);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/users", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send(data);
+                var xhr1 = new XMLHttpRequest();
+                xhr1.open("GET", "/users", true);
+                xhr1.onload = function() {
+                    console.log(this.responseText);
+                }
+                xhr1.send();
+
+
+                // finalArray = result.recordset.map(function(obj) {
+                //     return obj.UserID;
+                // });
+
+
+
+                // var userID = Math.floor(Math.random() * 100).toString();
+                // // var isDuplicate = this.responseText.includes(userID);
+                // var objectUser = userModal.read();
+                // objectUser.Id = userID;
+                // var data = JSON.stringify(objectUser);
+                // console.log(data);
+                // console.log(objectUser);
+                // var xhr = new XMLHttpRequest();
+                // xhr.open("POST", "/users", true);
+                // xhr.setRequestHeader("Content-Type", "application/json");
+                // xhr.send(data);
             };
         });
 

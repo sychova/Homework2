@@ -12,11 +12,6 @@ app.get("/users", function(req, res) {
     usersList.getUsers(req, res);
 });
 
-// Get a specific User for Editing
-app.get("/users/:id", function(req, res) {
-    usersList.editUser(req.params.id, res);
-});
-
 // Create a User
 app.post("/users", function(req, res) {
     res.sendStatus(200);
@@ -24,6 +19,11 @@ app.post("/users", function(req, res) {
         var objectUser = JSON.parse(c.toString());
         usersList.createUser(objectUser);
     });
+});
+
+// Get a specific User for Editing
+app.get("/users/:id", function(req, res) {
+    usersList.editUser(req.params.id, res);
 });
 
 // Update the User
