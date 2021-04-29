@@ -22,31 +22,18 @@
                 xhr.open("GET", "/users/" + this.getAttribute("data-userid"), true);
                 xhr.onload = function() {
                     if (this.status == 200) {
-                        console.log(JSON.parse(this.responseText));
-                        document.getElementById("FirstNameI").innerText = JSON.parse(this.responseText).FirstName;
+                        var userObject = JSON.parse(this.responseText)
+                        document.getElementById("FirstNameI").value = userObject.FirstName;
+                        document.getElementById("LastNameI").value = userObject.LastName;
+                        document.getElementById("AgeI").value = userObject.Age
+                        document.getElementById("PhoneI").value = userObject.Phone;
+                        document.getElementById("EmailI").value = userObject.Email;
+                        document.getElementById("GenderI").value = userObject.Gender;
                     }
                 }
                 xhr.send();
             });
         }
-        // var userEdit = document.getElementsByClassName("editUser");
-        // for (var i = 0; i < userEdit.length; i++) {
-        //     userEdit[i].addEventListener("click", function() {
-        //         var userID = this.getAttribute("data-userid");
-        //         userModal.open(initModalEvents, "Edit", function() {
-        //             document.getElementById("addUser").hidden = true;
-        //             document.getElementById("updateUser").hidden = false;
-        //             document.getElementById("updateUser").setAttribute("data-userid", userID);
-        //         });
-        //         var objectUser = JSON.parse(localStorage.getItem(userID));
-        //         document.getElementById("FirstNameI").value = objectUser.FirstName;
-        //         document.getElementById("LastNameI").value = objectUser.LastName;
-        //         document.getElementById("AgeI").value = objectUser.Age;
-        //         document.getElementById("PhoneI").value = objectUser.Phone;
-        //         document.getElementById("EmailI").value = objectUser.Email;
-        //         document.getElementById("GenderI").value = objectUser.Gender;
-        //     });
-        // };
     }
     var initModalEvents = function() {
         document.getElementById("formReset").addEventListener("click", function() {
@@ -67,18 +54,20 @@
         //         }
         //     }
         // });
-        // document.getElementById("updateUser").addEventListener("click", function() {
-        //     var userID = this.getAttribute("data-userid");
-        //     if (userModal.validate()) {
-        //         var objectUser = userModal.read(userID);
-        //         localStorage.setItem(userID, JSON.stringify(objectUser));
-        //         usersTable.createTable(initTableEvents);
-        //         userModal.close();
-        //     };
-        // });
+        document.getElementById("updateUser").addEventListener("click", function() {
+            var userID = this.getAttribute("data-userid");
+            if (userModal.validate()) {
+                console.log("ttt");
+                // var objectUser = userModal.read(userID);
+                // localStorage.setItem(userID, JSON.stringify(objectUser));
+                // usersTable.createTable(initTableEvents);
+                // userModal.close();
+            };
+        });
     }
     initEvents();
     initTableEvents();
     initModalEvents();
     var userModal = new UsersModal();
+    userModal;
 }());
