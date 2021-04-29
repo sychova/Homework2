@@ -12,7 +12,9 @@ app.get("/users/:id", function(req, res) {
     usersList.editUser(req.params.id, res);
 });
 
-app.post("/users/:id");
+app.post("/users/:id", function(req, res) {
+    console.log("hello");
+});
 
 app.delete("/users/:id", function(req, res) {
     res.sendStatus(200);

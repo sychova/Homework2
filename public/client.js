@@ -18,6 +18,11 @@
         var userEdit = document.getElementsByClassName("editUser");
         for (var i = 0; i < userEdit.length; i++) {
             userEdit[i].addEventListener("click", function() {
+                var userID = this.getAttribute("data-userid");
+                document.getElementById("modal-title").innerHTML = "Edit User";
+                document.getElementById("addUser").hidden = true;
+                document.getElementById("updateUser").hidden = false;
+                document.getElementById("updateUser").setAttribute("data-userid", userID);
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/users/" + this.getAttribute("data-userid"), true);
                 xhr.onload = function() {
@@ -57,8 +62,11 @@
         document.getElementById("updateUser").addEventListener("click", function() {
             var userID = this.getAttribute("data-userid");
             if (userModal.validate()) {
-                console.log("ttt");
-                // var objectUser = userModal.read(userID);
+                var objectUser = userModal.read(userID);
+                var data = JSON.stringify(objectUser);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/users/" + this.getAttribute("data-userid"), true);
+                xhr.send(data);
                 // localStorage.setItem(userID, JSON.stringify(objectUser));
                 // usersTable.createTable(initTableEvents);
                 // userModal.close();
