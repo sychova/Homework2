@@ -7,22 +7,21 @@ function getUsers() {
     pool.connect(() => {
         var sql = "SELECT * FROM dbo.Users";
         pool.query(sql, function(err, result) {
-            // console.log(result.recordset);
-            // console.log(ttt);
-            var qqq = JSON.stringify(result.recordset);
-            // console.log(qqq);
-            // res.render("index.pug", { users: result.recordset });
-            // res.send(qqq);
-            return qqq;
+            res.send(result.recordset);
         });
         mssql.close();
     });
 };
 
 function loadUsersPage(req, res) {
-    var qqq = getUsers();
-    console.log(qqq);
-    // res.render("index.pug", { users: qqq });
+    pool.connect(() => {
+        var sql = "SELECT * FROM dbo.Users";
+        pool.query(sql, function(err, result) {
+            console.log(result.recordset);
+            res.render("index.pug", { users: result.recordset });
+        });
+        mssql.close();
+    });
 };
 
 function deleteUser(req, res) {
@@ -37,8 +36,7 @@ function editUser(req, res) {
     pool.connect().then(() => {
         var sql = "SELECT * FROM dbo.Users WHERE UserID=" + parseInt(req);
         pool.query(sql, function(err, result) {
-            console.log(result.recordset);
-            res.send(result.recordset);
+            res.send(result.recordset[0]);
         });
         mssql.close();
     });

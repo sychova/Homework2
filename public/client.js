@@ -11,24 +11,22 @@
         for (var i = 0; i < userDelete.length; i++) {
             userDelete[i].addEventListener("click", function() {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "test.txt", true);
-                xhr.onload = function() {
-                    if (this.status == 200) {
-                        document.getElementById("newUser").innerHTML = this.responseText;
-                    }
-                }
+                xhr.open("DELETE", "/users/" + this.getAttribute("data-userid"), true);
                 xhr.send();
-                // fetch("/users/" + this.getAttribute("data-userid"), { method: 'DELETE' }).then(function() {
-                //     document.location.reload();
-                // });
             });
         };
         var userEdit = document.getElementsByClassName("editUser");
         for (var i = 0; i < userEdit.length; i++) {
             userEdit[i].addEventListener("click", function() {
-                fetch("/users/" + this.getAttribute("data-userid"), { method: 'GET' }).then((res) => {
-                    console.log(res);
-                });
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/users/" + this.getAttribute("data-userid"), true);
+                xhr.onload = function() {
+                    if (this.status == 200) {
+                        console.log(JSON.parse(this.responseText));
+                        document.getElementById("FirstNameI").innerText = JSON.parse(this.responseText).FirstName;
+                    }
+                }
+                xhr.send();
             });
         }
         // var userEdit = document.getElementsByClassName("editUser");
