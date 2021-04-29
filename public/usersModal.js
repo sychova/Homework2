@@ -24,15 +24,4 @@ var UsersModal = function() {
         objectUser.Gender = document.getElementById("GenderI").value;
         return objectUser;
     }
-    this.huj = function() {
-        var xhr1 = new XMLHttpRequest();
-        xhr1.open("GET", "/users", true);
-        xhr1.onload = function() {
-            var userIDs = JSON.parse(this.responseText).map(function(object) {
-                return object.userID;
-            })
-            console.log(userIDs);
-            return userIDs;
-        }
-    }
 }
