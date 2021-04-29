@@ -59,17 +59,49 @@
         //         }
         //     }
         // });
+
+        document.getElementById("addUser").addEventListener("click", function() {
+            if (userModal.validate()) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/users", true);
+                xhr.onload = function() {
+                    var isDuplicate = Math.floor(Math.random() * 100).toString();
+                };
+                xhr.send();
+                var userKey = Math.floor(Math.random() * 100).toString();
+                var isDuplicate =
+                    if (isDuplicate) {
+                        var objectUser = userModal.read();
+                        var data = JSON.stringify(objectUser);
+                        console.log(data);
+                        console.log(objectUser);
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/users", true);
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.send(data);
+                    }
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/users", true);
+            xhr.onload = function() {
+                console.log(this.responseText);
+            };
+            xhr.send();
+
+        });
+
         document.getElementById("updateUser").addEventListener("click", function() {
             var userID = this.getAttribute("data-userid");
             if (userModal.validate()) {
                 var objectUser = userModal.read(userID);
                 var data = JSON.stringify(objectUser);
+                console.log(data);
+                console.log(objectUser);
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "/users/" + this.getAttribute("data-userid"), true);
+                xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.send(data);
-                // localStorage.setItem(userID, JSON.stringify(objectUser));
-                // usersTable.createTable(initTableEvents);
-                // userModal.close();
             };
         });
     }
