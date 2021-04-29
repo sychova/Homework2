@@ -62,33 +62,18 @@
 
         document.getElementById("addUser").addEventListener("click", function() {
             if (userModal.validate()) {
+                var userID = Math.floor(Math.random() * 100).toString();
+                // var isDuplicate = this.responseText.includes(userID);
+                var objectUser = userModal.read();
+                objectUser.Id = userID;
+                var data = JSON.stringify(objectUser);
+                console.log(data);
+                console.log(objectUser);
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/users", true);
-                xhr.onload = function() {
-                    var isDuplicate = Math.floor(Math.random() * 100).toString();
-                };
-                xhr.send();
-                var userKey = Math.floor(Math.random() * 100).toString();
-                var isDuplicate =
-                    if (isDuplicate) {
-                        var objectUser = userModal.read();
-                        var data = JSON.stringify(objectUser);
-                        console.log(data);
-                        console.log(objectUser);
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "/users", true);
-                        xhr.setRequestHeader("Content-Type", "application/json");
-                        xhr.send(data);
-                    }
-            }
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/users", true);
-            xhr.onload = function() {
-                console.log(this.responseText);
+                xhr.open("POST", "/users", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(data);
             };
-            xhr.send();
-
         });
 
         document.getElementById("updateUser").addEventListener("click", function() {
