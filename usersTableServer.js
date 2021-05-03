@@ -8,9 +8,11 @@ function getUsers(req, res) {
         var sql = "SELECT * FROM dbo.Users";
         pool.query(sql, function(err, result) {
             console.log(result.recordset);
-            // finalArray = result.recordset.map(function(obj) {
-            //     return obj;
-            // });
+            var userList = `
+            `
+                // finalArray = result.recordset.map(function(obj) {
+                //     return obj;
+                // });
             res.send(result.recordset);
         });
         mssql.close();
