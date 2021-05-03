@@ -4,14 +4,30 @@
             document.getElementById("modal-title").innerHTML = "New User";
             document.getElementById("addUser").hidden = false;
             document.getElementById("updateUser").hidden = true;
+
         });
+    }
+    var getUsers = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/users", true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function() {
+            document.getElementById("users").innerHTML = this.responseText;
+            initTableEvents();
+        }
+        xhr.send();
     }
     var initTableEvents = function() {
         var userDelete = document.getElementsByClassName("deleteUser");
         for (var i = 0; i < userDelete.length; i++) {
             userDelete[i].addEventListener("click", function() {
+                console.log("clicked");
+                console.log(this.getAttribute("data-userid"));
                 var xhr = new XMLHttpRequest();
                 xhr.open("DELETE", "/users/" + this.getAttribute("data-userid"), true);
+                xhr.onload = function() {
+                    getUsers();
+                };
                 xhr.send();
             });
         };
@@ -42,42 +58,10 @@
     }
     var initModalEvents = function() {
         document.getElementById("formReset").addEventListener("click", function() {
-            document.getElementById("userForm").reset();
-            document.querySelector(".validationWarning").innerHTML = "";
+            userModal.reset();
         });
-        // document.getElementById("addUser").addEventListener("click", function() {
-        //     if (userModal.validate()) {
-        //         var userKey = Math.floor(Math.random() * 100).toString();
-        //         var isDuplicate = Object.keys(localStorage).includes(userKey);
-        //         if (isDuplicate) {
-        //             return generateUserId(Object.keys(localStorage));
-        //         } else {
-        //             var userData = userModal.read(userKey);
-        //             localStorage.setItem(userKey, JSON.stringify(userData));
-        //             usersTable.createTable(initTableEvents);
-        //             userModal.close();
-        //         }
-        //     }
-        // });
-
         document.getElementById("addUser").addEventListener("click", function() {
-            // if (userModal.validate()) {
-            //     var xhr = new XMLHttpRequest();
-            //     xhr.open("GET", "/users", true);
-            //     xhr.onload = function() {
-            //         console.log(this.responseText);
-            //     }
-            //     xhr.send();
-
-
-            // finalArray = result.recordset.map(function(obj) {
-            //     return obj.UserID;
-            // });
-
-
-
             var userID = Math.floor(Math.random() * 100).toString();
-            // var isDuplicate = this.responseText.includes(userID);
             var objectUser = userModal.read();
             objectUser.Id = userID;
             var data = JSON.stringify(objectUser);
@@ -86,10 +70,11 @@
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/users", true);
             xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onload = function() {
+                getUsers();
+                userModal.reset();
+            };
             xhr.send(data);
-            // } else {
-
-            // }
         });
 
         document.getElementById("updateUser").addEventListener("click", function() {
@@ -102,9 +87,20 @@
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "/users/" + this.getAttribute("data-userid"), true);
                 xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onload = function() {
+                    getUsers();
+                    userModal.reset();
+                };
                 xhr.send(data);
             };
         });
+
+        var formReset = document.querySelectorAll("[class*='close']");
+        for (var i = 0; i < formReset.length; i++) {
+            formReset[i].addEventListener("click", function() {
+                userModal.reset();
+            });
+        };
     }
     initEvents();
     initTableEvents();

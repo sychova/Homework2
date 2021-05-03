@@ -1,10 +1,8 @@
 var UsersModal = function() {
-    // this.close = function() {
-    //     setTimeout(function() { document.querySelector(".popup").style.display = "none"; }, 500);
-    //     document.querySelector(".popup").style.animation = "popupOUT 500ms";
-    //     setTimeout(function() { usersModal.classList.remove("popup"); }, 500);
-    //     usersModal.innerHTML = "";
-    // }
+    this.reset = function() {
+        document.getElementById("userForm").reset();
+        document.querySelector(".validationWarning").innerHTML = "";
+    }
     this.validate = function() {
         form = document.getElementById("userForm");
         if (form.checkValidity()) {
