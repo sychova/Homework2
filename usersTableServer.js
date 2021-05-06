@@ -43,8 +43,8 @@ function loadUsersPage(req, res) {
 function createUser(req, res) {
     pool.connect().then(() => {
         var sql = `
-        INSERT INTO dbo.Users(UserID, FirstName, LastName, Age, Phone, Email, Gender)
-        VALUES(${req.Id}, '${req.FirstName}', '${req.LastName}', '${req.Age}', '${req.Phone}', '${req.Email}', '${req.Gender}')
+        INSERT INTO dbo.Users(FirstName, LastName, Age, Phone, Email, Gender)
+        VALUES('${req.FirstName}', '${req.LastName}', '${req.Age}', '${req.Phone}', '${req.Email}', '${req.Gender}')
         `;
         pool.query(sql);
         mssql.close();

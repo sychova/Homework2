@@ -4,7 +4,6 @@
             document.getElementById("modal-title").innerHTML = "New User";
             document.getElementById("addUser").hidden = false;
             document.getElementById("updateUser").hidden = true;
-
         });
     }
     var getUsers = function() {
@@ -61,12 +60,8 @@
             userModal.reset();
         });
         document.getElementById("addUser").addEventListener("click", function() {
-            var userID = Math.floor(Math.random() * 100).toString();
             var objectUser = userModal.read();
-            objectUser.Id = userID;
             var data = JSON.stringify(objectUser);
-            console.log(data);
-            console.log(objectUser);
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/users", true);
             xhr.setRequestHeader("Content-Type", "application/json");
