@@ -1,98 +1,100 @@
-(function() {
+$(document).ready(function() {
     var initEvents = function() {
-        document.getElementById("newUser").addEventListener("click", function() {
-            document.getElementById("modal-title").innerHTML = "New User";
-            document.getElementById("addUser").hidden = false;
-            document.getElementById("updateUser").hidden = true;
+        $("#newUser").click(function() {
+            $("#modal-title").text("New User");
+            $("#addUser").show();
+            $("#updateUser").hide();
         });
+        // $("#Search").keyup(function() {
+        //     $.get(`/users/${$("#Search").val()}`, function(data) {
+        //         $("#users").html(data);
+        //         initTableEvents();
+        //     });
+        // });
     }
     var getUsers = function() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/users", true);
-        // xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = function() {
-            document.getElementById("users").innerHTML = this.responseText;
+        $.get("/users", function(data) {
+            var usersRows = "";
+            for (i = 0; i < data.length; i++) {
+                usersRows += `
+                <tr>
+                    <td>${data[i].FirstName}</td>
+                    <td>${data[i].LastName}</td>
+                    <td>${data[i].Age}</td>
+                    <td>${data[i].Phone}</td>
+                    <td>${data[i].Email}</td>
+                    <td>${data[i].Gender}</td>
+                    <td>
+                        <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${data[i].UserID}">Edit</button>
+                        <button class="deleteUser btn btn-danger" data-userid="${data[i].UserID}">Delete</button>
+                    </td>
+                </tr>`
+            }
+            $("#users").html(usersRows);
             initTableEvents();
-        }
-        xhr.send();
+        });
     }
     var initTableEvents = function() {
-        var userDelete = document.getElementsByClassName("deleteUser");
+        var userDelete = $(".deleteUser");
         for (var i = 0; i < userDelete.length; i++) {
-            userDelete[i].addEventListener("click", function() {
-                console.log("clicked");
-                console.log(this.getAttribute("data-userid"));
-                var xhr = new XMLHttpRequest();
-                xhr.open("DELETE", "/users/" + this.getAttribute("data-userid"), true);
-                xhr.onload = function() {
-                    getUsers();
-                };
-                xhr.send();
+            $(userDelete[i]).click(function() {
+                $.ajax({
+                    url: "/users/" + $(this).attr("data-userid"),
+                    type: 'DELETE',
+                    success: function() {
+                        getUsers();
+                    }
+                });
             });
         };
-        var userEdit = document.getElementsByClassName("editUser");
+        var userEdit = $(".editUser");
         for (var i = 0; i < userEdit.length; i++) {
-            userEdit[i].addEventListener("click", function() {
-                var userID = this.getAttribute("data-userid");
-                document.getElementById("modal-title").innerHTML = "Edit User";
-                document.getElementById("addUser").hidden = true;
-                document.getElementById("updateUser").hidden = false;
-                document.getElementById("updateUser").setAttribute("data-userid", userID);
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", `/users/${this.getAttribute("data-userid")}`, true);
-                xhr.onload = function() {
-                    if (this.status == 200) {
-                        var userObject = JSON.parse(this.responseText)
-                        document.getElementById("FirstNameI").value = userObject.FirstName;
-                        document.getElementById("LastNameI").value = userObject.LastName;
-                        document.getElementById("AgeI").value = userObject.Age
-                        document.getElementById("PhoneI").value = userObject.Phone;
-                        document.getElementById("EmailI").value = userObject.Email;
-                        document.getElementById("GenderI").value = userObject.Gender;
-                    }
-                }
-                xhr.send();
+            $(userEdit[i]).click(function() {
+                var userID = $(this).attr("data-userid");
+                $("#modal-title").text("Edit User");
+                $("#addUser").hide();
+                $("#updateUser").show();
+                $("#updateUser").attr("data-userid", userID);
+                $.get(`/user/${$(this).attr("data-userid")}`, function(data) {
+                    $("#FirstNameI").val(data.FirstName);
+                    $("#LastNameI").val(data.LastName);
+                    $("#AgeI").val(data.Age);
+                    $("#PhoneI").val(data.Phone);
+                    $("#EmailI").val(data.Email);
+                    $("#GenderI").val(data.Gender);
+                });
             });
         }
     }
     var initModalEvents = function() {
-        document.getElementById("formReset").addEventListener("click", function() {
+        $("#formReset").click(function() {
             userModal.reset();
         });
-        document.getElementById("addUser").addEventListener("click", function() {
+        $("#addUser").click(function() {
             var objectUser = userModal.read();
             var data = JSON.stringify(objectUser);
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/users", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onload = function() {
+            $.post("/users", data, function() {
                 getUsers();
                 userModal.reset();
-            };
-            xhr.send(data);
+            });
         });
 
-        document.getElementById("updateUser").addEventListener("click", function() {
-            var userID = this.getAttribute("data-userid");
+        $("#updateUser").click(function() {
+            var userID = $(this).attr("data-userid");
             if (userModal.validate()) {
                 var objectUser = userModal.read(userID);
                 var data = JSON.stringify(objectUser);
-                console.log(data);
-                console.log(objectUser);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/users/" + this.getAttribute("data-userid"), true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.onload = function() {
+                $.post(`/users/${$(this).attr("data-userid")}`, data, function() {
                     getUsers();
                     userModal.reset();
-                };
-                xhr.send(data);
+                });
             };
         });
 
-        var formReset = document.querySelectorAll("[class*='close']");
+        // var formReset = document.querySelectorAll("[class*='close']");
+        var formReset = $(".close");
         for (var i = 0; i < formReset.length; i++) {
-            formReset[i].addEventListener("click", function() {
+            $(formReset[i]).click(function() {
                 userModal.reset();
             });
         };
@@ -102,4 +104,4 @@
     initModalEvents();
     var userModal = new UsersModal();
     userModal;
-}());
+});

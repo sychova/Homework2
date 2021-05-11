@@ -5,26 +5,9 @@ const pool = new mssql.ConnectionPool(dbConfig.config);
 
 function getUsers(req, res) {
     pool.connect().then(() => {
-        var sql = "SELECT * FROM dbo.Users";
+        var sql = `SELECT * FROM dbo.Users`;
         pool.query(sql, function(err, result) {
-            var usersList = result.recordset;
-            var usersRows = "";
-            for (i = 0; i < usersList.length; i++) {
-                usersRows += `
-                <tr>
-                    <td>${usersList[i].FirstName}</td>
-                    <td>${usersList[i].LastName}</td>
-                    <td>${usersList[i].Age}</td>
-                    <td>${usersList[i].Phone}</td>
-                    <td>${usersList[i].Email}</td>
-                    <td>${usersList[i].Gender}</td>
-                    <td>
-                        <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${usersList[i].UserID}">Edit</button>
-                        <button class="deleteUser btn btn-danger" data-userid="${usersList[i].UserID}">Delete</button>
-                    </td>
-                </tr>`
-            }
-            res.send(usersRows);
+            res.send(result.recordset);
         });
         mssql.close();
     });
@@ -41,12 +24,13 @@ function loadUsersPage(req, res) {
 };
 
 function createUser(req, res) {
+    console.log(Object.values(req));
     pool.connect().then(() => {
-        var sql = `
-        INSERT INTO dbo.Users(FirstName, LastName, Age, Phone, Email, Gender)
-        VALUES('${req.FirstName}', '${req.LastName}', '${req.Age}', '${req.Phone}', '${req.Email}', '${req.Gender}')
-        `;
-        pool.query(sql);
+        var sql = "INSERT INTO dbo.Users(FirstName, LastName, Age, Phone, Email, Gender) VALUES ?";
+        var values = [Object.values(req)];
+        // VALUES('${req.FirstName}', '${req.LastName}', '${req.Age}', '${req.Phone}', '${req.Email}', '${req.Gender}')
+        // "INSERT INTO `users`(`name`,`age`,`email`) VALUES(?, ?, ?)",[_name, _age, _email]
+        pool.query(sql, [values]);
         mssql.close();
     });
 };

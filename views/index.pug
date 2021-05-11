@@ -6,7 +6,9 @@ head
 body
   h1.tableHeader User management
   div
-    button#newUser.btn.btn-primary(type='button' data-toggle='modal' data-target='#usersModal') Add User
+    button#newUser.btn.btn-primary(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#usersModal') Add User
+    label(for='Search') Search
+    input#Search.form-control(type='text' name='Search')
   table.table
     thead.thead-dark
       tr
@@ -27,7 +29,7 @@ body
           td= user.Email
           td= user.Gender
           td
-            button.editUser.btn.btn-primary(type='button' data-toggle='modal' data-target='#usersModal' data-userid=user.UserID) Edit
+            button.editUser.btn.btn-primary(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#usersModal' data-userid=user.UserID) Edit
             button.deleteUser.btn.btn-danger(data-userid=user.UserID) Delete
   #usersModal.modal(tabindex='-1' role='dialog' aria-labelledby='usersModal', aria-hidden='true')
     .modal-dialog(role='document')

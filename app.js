@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const usersList = require("./usersTableServer");
+const usersList = require("./userService");
 
 app.use(express.static('public'));
 
@@ -8,9 +8,14 @@ app.use(express.static('public'));
 app.get("/", usersList.loadUsersPage);
 
 // Get all the Users
-app.get("/users", function(req, res) {
+app.get("/users/", function(req, res) {
     usersList.getUsers(req, res);
 });
+
+// Search a User
+// app.get("/users/:search", function(req, res) {
+//     usersList.getUsers(req.params.search, res);
+// });
 
 // Create a User
 app.post("/users", function(req, res) {
@@ -22,7 +27,7 @@ app.post("/users", function(req, res) {
 });
 
 // Get a specific User for Editing
-app.get("/users/:id", function(req, res) {
+app.get("/user/:id", function(req, res) {
     usersList.editUser(req.params.id, res);
 });
 
