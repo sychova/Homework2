@@ -24,13 +24,12 @@ function loadUsersPage(req, res) {
 };
 
 function createUser(req, res) {
-    console.log(Object.values(req));
     pool.connect().then(() => {
-        var sql = "INSERT INTO dbo.Users(FirstName, LastName, Age, Phone, Email, Gender) VALUES ?";
-        var values = [Object.values(req)];
-        // VALUES('${req.FirstName}', '${req.LastName}', '${req.Age}', '${req.Phone}', '${req.Email}', '${req.Gender}')
-        // "INSERT INTO `users`(`name`,`age`,`email`) VALUES(?, ?, ?)",[_name, _age, _email]
-        pool.query(sql, [values]);
+        var sql = `
+        INSERT INTO dbo.Users(FirstName, LastName, Age, Phone, Email, Gender)
+        VALUES('${req.FirstName}', '${req.LastName}', '${req.Age}', '${req.Phone}', '${req.Email}', '${req.Gender}')
+        `;
+        pool.query(sql);
         mssql.close();
     });
 };
