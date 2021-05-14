@@ -6,9 +6,13 @@ head
 body
   h1.tableHeader User management
   div
-    button#newUser.btn.btn-primary(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#usersModal') Add User
-    label(for='Search') Search
-    input#Search.form-control(type='text' name='Search')
+    nav.navbar.navbar-light.bg-light
+      span.navbar-brand.mb-0.h1 Toolbar:
+      button.btn.btn-primary(type='button' data-toggle='collapse' data-target='#searchArea' aria-controls='searchArea') Search
+      button#newUser.btn.btn-primary(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#usersModal') Add User
+    #searchArea.collapse
+      .card.card-body
+        input#Search.form-control(type='text' name='Search' placeholder='Search')
   table.table
     thead.thead-dark
       tr
@@ -69,6 +73,6 @@ body
           button#formReset.btn.btn-secondary Reset
           button.btn.btn-link.modal-close(data-dismiss='modal') Close
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
-script(src='/usersModal.js')
+script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
+script(src='/usersServiceClient.js')
 script(src='/client.js')

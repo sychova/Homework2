@@ -4,7 +4,6 @@ const dbConfig = require("./dbconfig");
 const pool = new mssql.ConnectionPool(dbConfig.config);
 
 function getUsers(req, res) {
-    console.log(typeof req);
     pool.connect().then(() => {
         if (typeof req == "object") {
             var sql = `SELECT * FROM dbo.Users`;

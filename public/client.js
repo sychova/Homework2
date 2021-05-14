@@ -7,51 +7,18 @@ $(document).ready(function() {
         });
         $("#Search").keyup(function() {
             $.get(`/users?FirstName=${$("#Search").val()}`, function(data) {
-                var usersRows = "";
-                for (i = 0; i < data.length; i++) {
-                    usersRows += `
-                <tr>
-                    <td>${data[i].FirstName}</td>
-                    <td>${data[i].LastName}</td>
-                    <td>${data[i].Age}</td>
-                    <td>${data[i].Phone}</td>
-                    <td>${data[i].Email}</td>
-                    <td>${data[i].Gender}</td>
-                    <td>
-                        <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${data[i].UserID}">Edit</button>
-                        <button class="deleteUser btn btn-danger" data-userid="${data[i].UserID}">Delete</button>
-                    </td>
-                </tr>`
-                }
-                $("#users").html(usersRows);
+                $("#users").html(usersServiceClient.build(data));
                 initTableEvents();
             });
-            // http://localhost/articles?year=2016&month=1&day=19
-            // $.get(`/users/${$("#Search").val()}`, function(data) {
-            //     $("#users").html(data);
-            //     initTableEvents();
-            // });
+        });
+        $("#searchArea").on("shown.bs.collapse", function() {
+            $("#Search").val("");
+            getUsers();
         });
     }
     var getUsers = function() {
         $.get("/users", function(data) {
-            var usersRows = "";
-            for (i = 0; i < data.length; i++) {
-                usersRows += `
-                <tr>
-                    <td>${data[i].FirstName}</td>
-                    <td>${data[i].LastName}</td>
-                    <td>${data[i].Age}</td>
-                    <td>${data[i].Phone}</td>
-                    <td>${data[i].Email}</td>
-                    <td>${data[i].Gender}</td>
-                    <td>
-                        <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${data[i].UserID}">Edit</button>
-                        <button class="deleteUser btn btn-danger" data-userid="${data[i].UserID}">Delete</button>
-                    </td>
-                </tr>`
-            }
-            $("#users").html(usersRows);
+            $("#users").html(usersServiceClient.build(data));
             initTableEvents();
         });
     }
@@ -89,38 +56,36 @@ $(document).ready(function() {
     }
     var initModalEvents = function() {
         $("#formReset").click(function() {
-            userModal.reset();
+            usersServiceClient.reset();
         });
         $("#addUser").click(function() {
-            var objectUser = userModal.read();
+            var objectUser = usersServiceClient.read();
             var data = JSON.stringify(objectUser);
             $.post("/users", data, function() {
                 getUsers();
-                userModal.reset();
+                usersServiceClient.reset();
             });
         });
 
         $("#updateUser").click(function() {
             var userID = $(this).attr("data-userid");
-            var objectUser = userModal.read(userID);
+            var objectUser = usersServiceClient.read(userID);
             var data = JSON.stringify(objectUser);
             $.post(`/users/${$(this).attr("data-userid")}`, data, function() {
                 getUsers();
-                userModal.reset();
+                usersServiceClient.reset();
             });
         });
-
-        // var formReset = document.querySelectorAll("[class*='close']");
         var formReset = $(".close");
         for (var i = 0; i < formReset.length; i++) {
             $(formReset[i]).click(function() {
-                userModal.reset();
+                usersServiceClient.reset();
             });
         };
     }
     initEvents();
     initTableEvents();
     initModalEvents();
-    var userModal = new UsersModal();
-    userModal;
+    var usersServiceClient = new UsersServiceClient();
+    usersServiceClient;
 });
