@@ -3,37 +3,66 @@ const dbConfig = require("./dbconfig");
 
 const pool = new mssql.ConnectionPool(dbConfig.config);
 
+
+function loadUsersPage(req, res) {
+    res.render("index.pug");
+};
+
+function paginateUsers(req, res) {
+    pool.connect(() => {
+        var sql = "SELECT * FROM dbo.Users";
+        pool.query(sql, function(err, result) {
+            var page = req;
+            var limit = 5;
+            var startIndex = (page - 1) * limit;
+            var endIndex = page * limit;
+            var resultUsers = result.recordset.slice(startIndex, endIndex);
+            res.send(resultUsers);
+        });
+        mssql.close();
+    });
+};
+
 function getUsers(req, res) {
     pool.connect().then(() => {
-        if (typeof req == "object") {
-            var sql = `SELECT * FROM dbo.Users`;
+        if (req.filter) {
+            var sql = `
+            SELECT *
+            FROM dbo.Users
+            WHERE FirstName LIKE @Search OR LastName LIKE @Search OR Age LIKE @Search OR Phone LIKE @Search OR Email LIKE @Search OR Gender LIKE @Search
+            ORDER BY UserID
+            OFFSET @Offset ROWS
+            FETCH NEXT @Size ROWS ONLY
+            `;
         } else {
-            var sql = `SELECT * FROM dbo.Users WHERE FirstName LIKE @FirstName`;
+            var sql = `
+            SELECT *
+            FROM dbo.Users
+            ORDER BY UserID
+            OFFSET @Offset ROWS
+            FETCH FIRST @Size ROWS ONLY
+            `;
         }
         pool.request()
-            .input("FirstName", mssql.VarChar, `%${req}%`)
+            .input("Search", mssql.VarChar, `%${req.filter}%`)
+            .input("Offset", mssql.Int, `${(parseInt(req.page) - 1) * parseInt(req.size)}`)
+            .input("Size", mssql.Int, `${parseInt(req.size)}`)
             .query(sql, function(err, result) {
+                console.log(result);
                 res.send(result.recordset);
             });
         mssql.close();
     });
 };
 
-function loadUsersPage(req, res) {
-    pool.connect(() => {
-        var sql = "SELECT * FROM dbo.Users";
-        pool.query(sql, function(err, result) {
-            res.render("index.pug", { users: result.recordset });
-        });
-        mssql.close();
-    });
-};
-
 function createUser(req, res) {
-    var sql = "INSERT INTO dbo.Users VALUES (@FirstName, @LastName, @Age, @Phone, @Email, @Gender)";
+    var sql = `
+    INSERT INTO dbo.Users
+    VALUES (@FirstName, @LastName, @Age, @Phone, @Email, @Gender)
+    `;
     pool.connect().then(() => {
         pool.request()
-            .input("FirstName", mssql.VarChar, `${req.FirstName}`)
+            .input("Search", mssql.VarChar, `${req.FirstName}`)
             .input("LastName", mssql.VarChar, `${req.LastName}`)
             .input("Age", mssql.VarChar, `${req.Age}`)
             .input("Phone", mssql.VarChar, `${req.Phone}`)
@@ -45,7 +74,10 @@ function createUser(req, res) {
 
 function deleteUser(req, res) {
     pool.connect().then(() => {
-        var sql = "DELETE FROM dbo.Users WHERE UserID = @UserID";
+        var sql = `
+        DELETE FROM dbo.Users
+        WHERE UserID = @UserID
+        `;
         pool.request()
             .input("UserID", mssql.Int, `${parseInt(req)}`)
             .query(sql);
@@ -55,7 +87,10 @@ function deleteUser(req, res) {
 
 function editUser(req, res) {
     pool.connect().then(() => {
-        var sql = "SELECT * FROM dbo.Users WHERE UserID = @UserID";
+        var sql = `SELECT *
+        FROM dbo.Users
+        WHERE UserID = @UserID
+        `;
         pool.request()
             .input("UserID", mssql.Int, `${parseInt(req)}`)
             .query(sql, function(err, result) {
@@ -96,3 +131,4 @@ module.exports.editUser = editUser;
 module.exports.loadUsersPage = loadUsersPage;
 module.exports.updateUser = updateUser;
 module.exports.createUser = createUser;
+module.exports.paginateUsers = paginateUsers;

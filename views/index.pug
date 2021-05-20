@@ -13,6 +13,15 @@ body
     #searchArea.collapse
       .card.card-body
         input#Search.form-control(type='text' name='Search' placeholder='Search')
+  div
+    nav.paginationbar(aria-label='Page navigation example')
+      ul.pagination
+        li.page-item
+          a#page-previous.page-link(href='#') Previous
+        li.page-item
+          a#page-current.page-link 1
+        li.page-item
+          a#page-next.page-link(href='#') Next
   table.table
     thead.thead-dark
       tr
@@ -24,18 +33,7 @@ body
         th Gender
         th(colspan='2') Management
     tbody#users
-      each user in users
-        tr
-          td= user.FirstName
-          td= user.LastName
-          td= user.Age
-          td= user.Phone
-          td= user.Email
-          td= user.Gender
-          td
-            button.editUser.btn.btn-primary(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#usersModal' data-userid=user.UserID) Edit
-            button.deleteUser.btn.btn-danger(data-userid=user.UserID) Delete
-  #usersModal.modal(tabindex='-1' role='dialog' aria-labelledby='usersModal', aria-hidden='true')
+  #usersModal.modal(tabindex='-1' role='dialog' aria-labelledby='usersModal', aria-hidden='true' data-backdrop='static' data-keyboard='false')
     .modal-dialog(role='document')
       .modal-content
         .modal-header

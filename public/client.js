@@ -1,23 +1,53 @@
 $(document).ready(function() {
     var initEvents = function() {
         $("#newUser").click(function() {
+            // usersServiceClient.reset();
             $("#modal-title").text("New User");
             $("#addUser").show();
             $("#updateUser").hide();
         });
         $("#Search").keyup(function() {
-            $.get(`/users?FirstName=${$("#Search").val()}`, function(data) {
+            $("#page-current").text("1");
+            var page_current = parseInt($("#page-current").text());
+            $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, function(data) {
                 $("#users").html(usersServiceClient.build(data));
                 initTableEvents();
             });
         });
-        $("#searchArea").on("shown.bs.collapse", function() {
-            $("#Search").val("");
-            getUsers();
-        });
+        $("#page-previous").click(function() {
+            console.log("Previous");
+            var page_current = parseInt($("#page-current").text());
+            if ((page_current - 1) > 0) {
+                $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5`, function(data) {
+                    if (data.length > 0) {
+                        $("#users").html(usersServiceClient.build(data));
+                        initTableEvents();
+                        $("#page-current").text(`${page_current - 1}`);
+                    }
+                });
+            }
+        })
+        $("#page-next").click(function() {
+            console.log("Next");
+            var page_current = parseInt($("#page-current").text());
+            $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5`, function(data) {
+                if (data.length > 0) {
+                    $("#users").html(usersServiceClient.build(data));
+                    initTableEvents();
+                    $("#page-current").text(`${page_current + 1}`);
+                }
+            });
+        })
     }
-    var getUsers = function() {
-        $.get("/users", function(data) {
+    var getUsers = function(page_current) {
+        $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, function(data) {
+            console.log(data);
+            if (data.length == 0) {
+                if ((page_current - 1) > 0) {
+                    $("#page-current").text(page_current - 1);
+                    getUsers(page_current - 1);
+                }
+            }
             $("#users").html(usersServiceClient.build(data));
             initTableEvents();
         });
@@ -27,10 +57,10 @@ $(document).ready(function() {
         for (var i = 0; i < userDelete.length; i++) {
             $(userDelete[i]).click(function() {
                 $.ajax({
-                    url: "/users/" + $(this).attr("data-userid"),
+                    url: `/users/${$(this).attr("data-userid")}`,
                     type: 'DELETE',
                     success: function() {
-                        getUsers();
+                        getUsers(parseInt($("#page-current").text()));
                     }
                 });
             });
@@ -62,7 +92,7 @@ $(document).ready(function() {
             var objectUser = usersServiceClient.read();
             var data = JSON.stringify(objectUser);
             $.post("/users", data, function() {
-                getUsers();
+                getUsers(parseInt($("#page-current").text()));
                 usersServiceClient.reset();
             });
         });
@@ -72,17 +102,20 @@ $(document).ready(function() {
             var objectUser = usersServiceClient.read(userID);
             var data = JSON.stringify(objectUser);
             $.post(`/users/${$(this).attr("data-userid")}`, data, function() {
-                getUsers();
+                getUsers(parseInt($("#page-current").text()));
                 usersServiceClient.reset();
             });
         });
-        var formReset = $(".close");
-        for (var i = 0; i < formReset.length; i++) {
+        var formReset = $(".close, .modal-close");
+        for (var i = 0; i <= formReset.length; i++) {
+            console.log(formReset.length);
+            console.log(formReset[i]);
             $(formReset[i]).click(function() {
                 usersServiceClient.reset();
             });
         };
     }
+    getUsers(parseInt($("#page-current").text()));
     initEvents();
     initTableEvents();
     initModalEvents();

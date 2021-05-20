@@ -69,7 +69,7 @@ table {
     color: red;
 }
 
-
-/* .hidden {
-    display: none;
-} */
+.paginationbar {
+    display: flex;
+    justify-content: center;
+}
