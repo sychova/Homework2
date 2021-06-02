@@ -1,19 +1,16 @@
 $(document).ready(function() {
     var initEvents = function() {
-        $("#newUser").on("click", function() {
-            // usersServiceClient.reset();
-            $("#modal-title").text("New User");
-            $("#addUser").show();
-            $("#updateUser").hide();
-        });
-
         // Users sorting
+        var sorter = {
+            sorting: "UserID",
+            order: "ASC"
+        };
         var sortingRow = $("th").slice(0, 6);
-        sortingRow.on("click", function(e) {
-            var sorting = $(e.target).attr("data-dbName");
-            var order = $(e.target).attr("data-sortingOrder");
-            $.get(`/users?page=1&size=5&sorting=${sorting}&order=${order}`, function(data) {
-                console.log(order);
+        var sortUsers = function(e) {
+            $("#page-current").text("1");
+            sorter.sorting = $(e.target).attr("data-dbName");
+            sorter.order = $(e.target).attr("data-sortingOrder");
+            $.get(`/users?page=1&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                 if ($(e.target).attr("data-sortingOrder") == "ASC") {
                     $(e.target).attr("data-sortingOrder", "DESC");
                 } else {
@@ -22,13 +19,16 @@ $(document).ready(function() {
                 $("#users").html(usersServiceClient.build(data));
                 initTableEvents();
             });
+        }
+        sortingRow.on("click", function(e) {
+            sortUsers(e);
         });
 
         // Search
         $("#Search").on("keyup", function() {
             $("#page-current").text("1");
             var page_current = parseInt($("#page-current").text());
-            $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, function(data) {
+            $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                 $("#users").html(usersServiceClient.build(data));
                 initTableEvents();
             });
@@ -39,7 +39,7 @@ $(document).ready(function() {
             console.log("Previous");
             var page_current = parseInt($("#page-current").text());
             if ((page_current - 1) > 0) {
-                $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5`, function(data) {
+                $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                     if (data.length > 0) {
                         $("#users").html(usersServiceClient.build(data));
                         initTableEvents();
@@ -47,22 +47,23 @@ $(document).ready(function() {
                     }
                 });
             }
-        })
+        });
         $("#page-next").on("click", function() {
             console.log("Next");
             var page_current = parseInt($("#page-current").text());
-            $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5`, function(data) {
+            $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                 if (data.length > 0) {
                     $("#users").html(usersServiceClient.build(data));
                     initTableEvents();
                     $("#page-current").text(`${page_current + 1}`);
                 }
             });
-        })
+        });
     }
 
     // Users getter
-    var getUsers = function(page_current) {
+    var getUsers = function() {
+        var page_current = parseInt($("#page-current").text());
         $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, function(data) {
             if (data.length == 0) {
                 if ((page_current - 1) > 0) {
@@ -82,7 +83,7 @@ $(document).ready(function() {
                     url: `/users/${$(this).attr("data-userid")}`,
                     type: 'DELETE',
                     success: function() {
-                        getUsers(parseInt($("#page-current").text()));
+                        getUsers();
                     }
                 });
             });
@@ -110,11 +111,18 @@ $(document).ready(function() {
         $("#formReset").on("click", function() {
             usersServiceClient.reset();
         });
+        var formReset = $(".close, .modal-close");
+        for (var i = 0; i <= formReset.length; i++) {
+            $(formReset[i]).on("click", function() {
+                usersServiceClient.reset();
+            });
+        };
+
         $("#addUser").on("click", function() {
             var objectUser = usersServiceClient.read();
             var data = JSON.stringify(objectUser);
             $.post("/users", data, function() {
-                getUsers(parseInt($("#page-current").text()));
+                getUsers();
                 usersServiceClient.reset();
             });
         });
@@ -124,18 +132,12 @@ $(document).ready(function() {
             var objectUser = usersServiceClient.read(userID);
             var data = JSON.stringify(objectUser);
             $.post(`/users/${$(this).attr("data-userid")}`, data, function() {
-                getUsers(parseInt($("#page-current").text()));
+                getUsers();
                 usersServiceClient.reset();
             });
         });
-        var formReset = $(".close, .modal-close");
-        for (var i = 0; i <= formReset.length; i++) {
-            $(formReset[i]).on("click", function() {
-                usersServiceClient.reset();
-            });
-        };
     }
-    getUsers(parseInt($("#page-current").text()));
+    getUsers();
     initEvents();
     initTableEvents();
     initModalEvents();

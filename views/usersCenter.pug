@@ -4,10 +4,34 @@ head
   link(rel='stylesheet' type='text/css' href='/style.css')
   link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous')
 body
-  h1.tableHeader Registration
-    button#register.btn.btn-success(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#usersModal') Register
-    button#logIn.btn.btn-primary(type='button' data-toggle='modal' data-backdrop='static' data-keyboard='false') Log in
-    button#usersCenter.btn.btn-primary(type='button') Users Center
+  h1.tableHeader User management
+  div
+    nav.navbar.navbar-light.bg-light
+      span.navbar-brand.mb-0.h1 Toolbar:
+      button.btn.btn-primary(type='button' data-toggle='collapse' data-target='#searchArea' aria-controls='searchArea') Search
+    #searchArea.collapse
+      .card.card-body
+        input#Search.form-control(type='text' name='Search' placeholder='Search')
+  div
+    nav.paginationbar(aria-label='Page navigation example')
+      ul.pagination
+        li.page-item
+          a#page-previous.page-link(href='#') Previous
+        li.page-item
+          a#page-current.page-link 1
+        li.page-item
+          a#page-next.page-link(href='#') Next
+  table.table
+    thead.thead-dark
+      tr
+        th(data-dbName='FirstName' data-sortingOrder='ASC') First Name
+        th(data-dbName='LastName' data-sortingOrder='ASC') Last Name
+        th(data-dbName='Age' data-sortingOrder='ASC') Age
+        th(data-dbName='Phone' data-sortingOrder='ASC') Phone
+        th(data-dbName='Email' data-sortingOrder='ASC') Email
+        th(data-dbName='Gender' data-sortingOrder='ASC') Gender
+        th(colspan='2') Management
+    tbody#users
   #usersModal.modal(tabindex='-1' role='dialog' aria-labelledby='usersModal', aria-hidden='true' data-backdrop='static' data-keyboard='false')
     .modal-dialog(role='document')
       .modal-content
@@ -48,4 +72,4 @@ body
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
 script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
 script(src='/usersServiceClient.js')
-script(src='/registrationClient.js')
+script(src='/userClient.js')

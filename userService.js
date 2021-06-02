@@ -1,12 +1,8 @@
 const mssql = require("mssql/msnodesqlv8");
 const dbConfig = require("./dbconfig");
+const sqlHelper = require("./userServiceSQLHelper");
 
 const pool = new mssql.ConnectionPool(dbConfig.config);
-
-
-function loadUsersPage(req, res) {
-    res.render("index.pug");
-};
 
 function paginateUsers(req, res) {
     pool.connect(() => {
@@ -24,60 +20,33 @@ function paginateUsers(req, res) {
 };
 
 function getUsers(req, res) {
+    var sortBy = sqlHelper.sortBy(req.sorting);
+    var sortDirection = sqlHelper.sortDirection(req.order);
     pool.connect().then(() => {
-        console.log(req.sorting);
-        console.log(typeof req.sorting);
         if (req.filter) {
-            // var sql = `
-            // SELECT *
-            // FROM dbo.Users
-            // WHERE FirstName LIKE @Search OR LastName LIKE @Search OR Age LIKE @Search OR Phone LIKE @Search OR Email LIKE @Search OR Gender LIKE @Search
-            // ORDER BY @Sorting
-            // OFFSET @Offset ROWS
-            // FETCH NEXT @Size ROWS ONLY
-            // `;
             var sql = `
             SELECT *
             FROM dbo.Users
             WHERE FirstName LIKE @Search OR LastName LIKE @Search OR Age LIKE @Search OR Phone LIKE @Search OR Email LIKE @Search OR Gender LIKE @Search
-            ORDER BY UserID
+            ORDER BY ${sortBy} ${sortDirection}
+            OFFSET @Offset ROWS
+            FETCH FIRST @Size ROWS ONLY
             `;
         } else {
-            // var sql = `
-            // SELECT *
-            // FROM dbo.Users
-            // ORDER BY UserID
-            // OFFSET @Offset ROWS
-            // FETCH FIRST @Size ROWS ONLY
-            // `;
             var sql = `
             SELECT *
             FROM dbo.Users
-            ORDER BY UserID
+            ORDER BY ${sortBy} ${sortDirection}
+            OFFSET @Offset ROWS
+            FETCH FIRST @Size ROWS ONLY
             `;
         }
         pool.request()
             .input("Search", mssql.VarChar, `%${req.filter}%`)
-            .input("Sorting", mssql.VarChar, `%${req.sorting}%`)
             .input("Offset", mssql.Int, `${(parseInt(req.page) - 1) * parseInt(req.size)}`)
             .input("Size", mssql.Int, `${parseInt(req.size)}`)
             .query(sql, function(err, result) {
-                if (req.sorting) {
-                    if (req.order == "ASC") {
-                        var sortedUsers = result.recordset.sort(function(a, b) {
-                            return a[req.sorting] - b[req.sorting];
-                        });
-                        var resultingUsers = sortedUsers.slice(`${(parseInt(req.page) - 1) * parseInt(req.size)}`, `${parseInt(req.size) * parseInt(req.page)}`);
-                    } else if (req.order == "DESC") {
-                        var sortedUsers = result.recordset.sort(function(a, b) {
-                            return b[req.sorting] - a[req.sorting];
-                        });
-                        var resultingUsers = sortedUsers.slice(`${(parseInt(req.page) - 1) * parseInt(req.size)}`, `${parseInt(req.size) * parseInt(req.page)}`);
-                    }
-                } else {
-                    var resultingUsers = result.recordset.slice(`${(parseInt(req.page) - 1) * parseInt(req.size)}`, `${parseInt(req.size) * parseInt(req.page)}`);
-                }
-                res.send(resultingUsers);
+                res.send(result.recordset);
             });
         mssql.close();
     });
@@ -85,12 +54,12 @@ function getUsers(req, res) {
 
 function createUser(req, res) {
     var sql = `
-    INSERT INTO dbo.Users
+    INSERT INTO dbo.Users (FirstName, LastName, Age, Phone, Email, Gender)
     VALUES (@FirstName, @LastName, @Age, @Phone, @Email, @Gender)
     `;
     pool.connect().then(() => {
         pool.request()
-            .input("Search", mssql.VarChar, `${req.FirstName}`)
+            .input("FirstName", mssql.VarChar, `${req.FirstName}`)
             .input("LastName", mssql.VarChar, `${req.LastName}`)
             .input("Age", mssql.VarChar, `${req.Age}`)
             .input("Phone", mssql.VarChar, `${req.Phone}`)
@@ -156,7 +125,6 @@ function updateUser(req) {
 module.exports.getUsers = getUsers;
 module.exports.deleteUser = deleteUser;
 module.exports.editUser = editUser;
-module.exports.loadUsersPage = loadUsersPage;
 module.exports.updateUser = updateUser;
 module.exports.createUser = createUser;
 module.exports.paginateUsers = paginateUsers;

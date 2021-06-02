@@ -4,8 +4,14 @@ const usersList = require("./userService");
 
 app.use(express.static('public'));
 
+app.get("/", function(req, res) {
+    res.render("index.pug");
+});
+
 // Load page
-app.get("/", usersList.loadUsersPage);
+app.get("/usersCenter", function(req, res) {
+    res.render("usersCenter.pug");
+});
 
 // Get Users
 app.get("/users", function(req, res) {
