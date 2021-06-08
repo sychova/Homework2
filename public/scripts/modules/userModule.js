@@ -1,4 +1,4 @@
-$(document).ready(function() {
+var userModule = (function() {
     var initEvents = function() {
         // Users sorting
         var sorter = {
@@ -16,7 +16,7 @@ $(document).ready(function() {
                 } else {
                     $(e.target).attr("data-sortingOrder", "ASC");
                 }
-                $("#users").html(usersServiceClient.build(data));
+                $("#users").html(tableBuilder(data));
                 initTableEvents();
             });
         }
@@ -29,7 +29,7 @@ $(document).ready(function() {
             $("#page-current").text("1");
             var page_current = parseInt($("#page-current").text());
             $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
-                $("#users").html(usersServiceClient.build(data));
+                $("#users").html(tableBuilder(data));
                 initTableEvents();
             });
         });
@@ -41,7 +41,7 @@ $(document).ready(function() {
             if ((page_current - 1) > 0) {
                 $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                     if (data.length > 0) {
-                        $("#users").html(usersServiceClient.build(data));
+                        $("#users").html(tableBuilder(data));
                         initTableEvents();
                         $("#page-current").text(`${page_current - 1}`);
                     }
@@ -53,7 +53,7 @@ $(document).ready(function() {
             var page_current = parseInt($("#page-current").text());
             $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                 if (data.length > 0) {
-                    $("#users").html(usersServiceClient.build(data));
+                    $("#users").html(tableBuilder(data));
                     initTableEvents();
                     $("#page-current").text(`${page_current + 1}`);
                 }
@@ -71,7 +71,7 @@ $(document).ready(function() {
                     getUsers(page_current - 1);
                 }
             }
-            $("#users").html(usersServiceClient.build(data));
+            $("#users").html(tableBuilder(data));
             initTableEvents();
         });
     }
@@ -109,38 +109,88 @@ $(document).ready(function() {
     }
     var initModalEvents = function() {
         $("#formReset").on("click", function() {
-            usersServiceClient.reset();
+            modalReset();
         });
         var formReset = $(".close, .modal-close");
         for (var i = 0; i <= formReset.length; i++) {
             $(formReset[i]).on("click", function() {
-                usersServiceClient.reset();
+                modalReset();
             });
         };
 
         $("#addUser").on("click", function() {
-            var objectUser = usersServiceClient.read();
+            var objectUser = modalRead();
             var data = JSON.stringify(objectUser);
             $.post("/users", data, function() {
                 getUsers();
-                usersServiceClient.reset();
+                modalReset();
             });
         });
 
         $("#updateUser").on("click", function() {
             var userID = $(this).attr("data-userid");
-            var objectUser = usersServiceClient.read(userID);
+            var objectUser = modalRead(userID);
+
             var data = JSON.stringify(objectUser);
             $.post(`/users/${$(this).attr("data-userid")}`, data, function() {
                 getUsers();
-                usersServiceClient.reset();
+                modalReset();
             });
         });
     }
-    getUsers();
-    initEvents();
-    initTableEvents();
-    initModalEvents();
-    var usersServiceClient = new UsersServiceClient();
-    usersServiceClient;
-});
+
+    var modalReset = function() {
+        $("#userForm").trigger("reset");
+        $(".validationWarning").text = "";
+    }
+
+    var modalValidate = function() {
+        //form = $("#userForm");
+        if ($("#userForm").isValid()) {
+            return true;
+        } else {
+            $(".validationWarning").text("Your form is not valid. Please revise your data.");
+        }
+    }
+
+    var modalRead = function(userID) {
+        var objectUser = {};
+        objectUser.Id = userID;
+        objectUser.FirstName = $("#FirstNameI").val();
+        objectUser.LastName = $("#LastNameI").val();
+        objectUser.Age = $("#AgeI").val();
+        objectUser.Phone = $("#PhoneI").val();
+        objectUser.Email = $("#EmailI").val();
+        objectUser.Gender = $("#GenderI").val();
+        return objectUser;
+    }
+
+    var tableBuilder = function(data) {
+        var usersRows = "";
+        for (i = 0; i < data.length; i++) {
+            usersRows += `
+            <tr>
+                <td>${data[i].FirstName}</td>
+                <td>${data[i].LastName}</td>
+                <td>${data[i].Age}</td>
+                <td>${data[i].Phone}</td>
+                <td>${data[i].Email}</td>
+                <td>${data[i].Gender}</td>
+                <td>
+                    <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${data[i].UserID}">Edit</button>
+                    <button class="deleteUser btn btn-danger" data-userid="${data[i].UserID}">Delete</button>
+                </td>
+            </tr>`
+        }
+        return usersRows;
+    }
+    var init = function() {
+        initEvents();
+        getUsers();
+        initModalEvents();
+    }
+    return {
+        init: init,
+        moduleName: "userModule",
+    };
+})();
