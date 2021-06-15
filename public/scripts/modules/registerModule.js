@@ -7,12 +7,10 @@ var registerModule = (function() {
         variable++;
         console.log(`clicked ${variable} times`);
     }
-    var init = function(value) {
-        variable = value;
+    var init = function() {
         bindEvents();
         console.log("events initialized");
     };
-
     return {
         init: init,
         moduleName: "registerModule",

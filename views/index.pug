@@ -1,25 +1,6 @@
-doctype html
-head
-  title User management
-  link(rel='stylesheet' type='text/css' href='/style.css')
-  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous')
-body
-  div.header
-    nav.navbar.navbar-light.bg-light
-      a(href='/')
-        img(alt='Logo' src='/images/logo.png' width='136' height='56')
-      h2 Header
-      button#usersCenter.btn.btn-primary(type='button') Users Center
-  h1.tableHeader Registration
+extends layout
 
-  div.footer
-    nav.navbar.navbar-light.bg-light
-      a(href='/')
-        img(alt='Logo' src='/images/logo.png' width='136' height='56')
-      h2 Footer
-      button#usersCenter.btn.btn-primary(type='button') Users Center
-script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-script(src='https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js')
-script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
-script(src='/scripts/modules/registerModule.js')
-script(src='/scripts/app.js')
+block content
+  h1.tableHeader Hello my friend
+  button#register.btn.btn-primary(type='button' data-toggle="tooltip" data-placement="bottom" title="Ahh... fresh meat!") Register
+  button#signin.btn.btn-primary(type='button' data-toggle="tooltip" data-placement="bottom" title="Stay awhile and listen") Sign in

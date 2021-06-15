@@ -1,9 +1,6 @@
-doctype html
-head
-  title User management
-  link(rel='stylesheet' type='text/css' href='/style.css')
-  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous')
-body
+extends layout
+
+block content
   h1.tableHeader User management
   div
     nav.navbar.navbar-light.bg-light
@@ -69,8 +66,3 @@ body
           button#updateUser.btn.btn-success(data-dismiss='modal') Save
           button#formReset.btn.btn-secondary Reset
           button.btn.btn-link.modal-close(data-dismiss='modal') Close
-script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-script(src='https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js')
-script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
-script(src='/scripts/modules/userModule.js')
-script(src='/scripts/app.js')
