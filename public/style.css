@@ -1,0 +1,82 @@
+.modal-backdrop {
+    opacity: 0.5;
+}
+
+input:valid {
+    background-color: lightgreen;
+}
+
+input:invalid {
+    background-color: lightpink;
+}
+
+table {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-right: 10px;
+}
+
+.popup {
+    background-color: rgb(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-contents {
+    padding: 15px 20px;
+    background-color: white;
+    height: auto;
+    width: 30%;
+}
+
+@keyframes popupIN {
+    from {
+        opacity: 0
+    }
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes popupOUT {
+    from {
+        opacity: 1
+    }
+    to {
+        opacity: 0
+    }
+    ;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.popup-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.validationWarning {
+    color: red;
+}
+
+.paginationbar {
+    display: flex;
+    justify-content: center;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
