@@ -22,7 +22,7 @@ var userModule = (function() {
             sorter.sorting = $(e.target).attr("data-dbName");
             sorter.order = $(e.target).attr("data-sortingOrder");
             $.get(`/users?page=1&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
-                if ($(e.target).attr("data-sortingOrder") == "ASC") {
+                if ($(e.target).attr("data-sortingOrder") === "ASC") {
                     $(e.target).attr("data-sortingOrder", "DESC");
                 } else {
                     $(e.target).attr("data-sortingOrder", "ASC");
@@ -76,7 +76,7 @@ var userModule = (function() {
     var getUsers = function() {
         var page_current = parseInt($("#page-current").text());
         $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, function(data) {
-            if (data.length == 0) {
+            if (data.length === 0) {
                 if ((page_current - 1) > 0) {
                     $("#page-current").text(page_current - 1);
                     getUsers(page_current - 1);
