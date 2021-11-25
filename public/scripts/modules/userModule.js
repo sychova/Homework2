@@ -1,5 +1,16 @@
 var userModule = (function() {
     var initEvents = function() {
+        // User registration
+        $("#register").on("click", function() {
+            // usersServiceClient.reset();
+            $("#modal-title").text("New User");
+            $("#addUser").show();
+            $("#updateUser").hide();
+        });
+        $("#usersCenter").on("click", function(req, res) {
+            window.location.replace("/usersCenter");
+        });
+
         // Users sorting
         var sorter = {
             sorting: "UserID",

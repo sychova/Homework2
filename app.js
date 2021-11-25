@@ -10,11 +10,6 @@ app.get("/", function(req, res) {
     res.render("index.pug");
 });
 
-// Load page
-app.get("/users-center", function(req, res) {
-    res.render("usersCenter.pug");
-});
-
 // Get Users
 app.get("/users", function(req, res) {
     usersList.getUsers(req.query, res);
