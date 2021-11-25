@@ -9,7 +9,7 @@ app.get("/", function(req, res) {
 });
 
 // Load page
-app.get("/usersCenter", function(req, res) {
+app.get("/users-center", function(req, res) {
     res.render("usersCenter.pug");
 });
 
