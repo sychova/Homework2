@@ -20,7 +20,7 @@ app.get("/users", function(req, res) {
 
 // Create a User
 app.post("/users", function(req, res) {
-    res.sendStatus(200);
+    res.sendStatus(201);
     req.on('data', function(c) {
         var objectUser = JSON.parse(c.toString());
         usersList.createUser(objectUser);
