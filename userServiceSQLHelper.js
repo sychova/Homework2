@@ -3,11 +3,7 @@ function sortBy(sortBy) {
 };
 
 function sortDirection(sortDirection) {
-    if (sortDirection === "DESC") {
-        return "DESC";
-    } else {
-        return "ASC";
-    }
+    return sortDirection || "ASC"
 };
 
 module.exports.sortBy = sortBy;
