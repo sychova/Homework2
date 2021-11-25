@@ -2,7 +2,6 @@ var userModule = (function() {
     var initEvents = function() {
         // User registration
         $("#register").on("click", function() {
-            // usersServiceClient.reset();
             $("#modal-title").text("New User");
             $("#addUser").show();
             $("#updateUser").hide();
@@ -143,9 +142,14 @@ var userModule = (function() {
             var objectUser = modalRead(userID);
 
             var data = JSON.stringify(objectUser);
-            $.post(`/users/${$(this).attr("data-userid")}`, data, function() {
-                getUsers();
-                modalReset();
+            $.ajax({
+                type: 'PATCH',
+                url: `/users/${$(this).attr("data-userid")}`,
+                data,
+                success: function() {
+                    getUsers();
+                    modalReset();
+                }
             });
         });
     }
