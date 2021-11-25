@@ -1,6 +1,6 @@
 const mssql = require("mssql/msnodesqlv8");
 const dbConfig = require("./dbconfig");
-const sqlHelper = require("./userServiceSQLHelper");
+const { sorterBy, sorterDirection } = require("./userServiceSQLHelper");
 
 const pool = new mssql.ConnectionPool(dbConfig.config);
 
@@ -20,8 +20,8 @@ function paginateUsers(req, res) {
 };
 
 function getUsers(req, res) {
-    var sortBy = sqlHelper.sortBy(req.sorting);
-    var sortDirection = sqlHelper.sortDirection(req.order);
+    var sortBy = sorterBy(req.sorting);
+    var sortDirection = sorterDirection(req.order);
     pool.connect().then(() => {
         if (req.filter) {
             var sql = `
@@ -122,9 +122,11 @@ function updateUser(req) {
     });
 };
 
-module.exports.getUsers = getUsers;
-module.exports.deleteUser = deleteUser;
-module.exports.editUser = editUser;
-module.exports.updateUser = updateUser;
-module.exports.createUser = createUser;
-module.exports.paginateUsers = paginateUsers;
+module.exports = {
+    getUsers,
+    deleteUser,
+    editUser,
+    updateUser,
+    createUser,
+    paginateUsers
+}

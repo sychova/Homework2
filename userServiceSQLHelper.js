@@ -1,10 +1,12 @@
-function sortBy(sortBy) {
+function sorterBy(sortBy) {
     return sortBy || "UserID"
 };
 
-function sortDirection(sortDirection) {
+function sorterDirection(sortDirection) {
     return sortDirection || "ASC"
 };
 
-module.exports.sortBy = sortBy;
-module.exports.sortDirection = sortDirection;
+module.exports = {
+    sorterBy,
+    sorterDirection
+}
