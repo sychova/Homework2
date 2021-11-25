@@ -33,7 +33,7 @@ app.get("/users/:id", function(req, res) {
 });
 
 // Update the User
-app.post("/users/:id", function(req, res) {
+app.patch("/users/:id", function(req, res) {
     res.sendStatus(200);
     req.on('data', function(c) {
         var objectUser = JSON.parse(c.toString());
