@@ -82,7 +82,7 @@ const deleteUser = (req, res) => {
     });
 };
 
-const editUser = (req, res) => {
+function editUser (req, res) {
     pool.connect().then(() => {
         var sql = `SELECT *
         FROM dbo.users
@@ -93,11 +93,12 @@ const editUser = (req, res) => {
             .query(sql, (err, result) => {
                 res.send(result.recordset[0]);
             });
+            
         mssql.close();
     });
 };
 
-const updateUser = (req) => {
+function updateUser (req) {
     pool.connect().then(() => {
         var sql = `
         UPDATE dbo.users SET

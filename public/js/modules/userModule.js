@@ -135,7 +135,7 @@ var userModule = (() => {
             });
         });
 
-        $("#updateUser").on("click", () => {
+        $("#updateUser").on("click", function () {
             var userID = $(this).attr("data-userid");
             var objectUser = modalRead(userID);
 
