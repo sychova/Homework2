@@ -9,5 +9,3 @@ const config = {
 };
 
 module.exports.config = config;
-
-// DB_SERVER='(LocalDB)\\MSSQLLocalDB'
