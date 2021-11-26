@@ -4,7 +4,7 @@ const { sorterBy, sorterDirection } = require("./userServiceSQLHelper");
 
 const pool = new mssql.ConnectionPool(dbConfig.config);
 
-function paginateUsers(req, res) {
+const paginateUsers = (req, res) => {
     pool.connect(() => {
         var sql = "SELECT * FROM dbo.users";
         pool.query(sql, (err, result) => {
@@ -19,7 +19,7 @@ function paginateUsers(req, res) {
     });
 };
 
-function getUsers(req, res) {
+const getUsers = (req, res) => {
     var sortBy = sorterBy(req.sorting);
     var sortDirection = sorterDirection(req.order);
     pool.connect().then(() => {
@@ -52,7 +52,7 @@ function getUsers(req, res) {
     });
 };
 
-function createUser(req, res) {
+const createUser = (req, res) => {
     var sql = `
     INSERT INTO dbo.users (first_name, last_name, age, phone, email, gender)
     VALUES (@first_name, @last_name, @age, @phone, @email, @gender)
@@ -69,7 +69,7 @@ function createUser(req, res) {
     });
 };
 
-function deleteUser(req, res) {
+const deleteUser = (req, res) => {
     pool.connect().then(() => {
         var sql = `
         DELETE FROM dbo.users
@@ -82,7 +82,7 @@ function deleteUser(req, res) {
     });
 };
 
-function editUser(req, res) {
+const editUser = (req, res) => {
     pool.connect().then(() => {
         var sql = `SELECT *
         FROM dbo.users
@@ -97,7 +97,7 @@ function editUser(req, res) {
     });
 };
 
-function updateUser(req) {
+const updateUser = (req) => {
     pool.connect().then(() => {
         var sql = `
         UPDATE dbo.users SET

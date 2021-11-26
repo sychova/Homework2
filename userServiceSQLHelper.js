@@ -1,8 +1,8 @@
-function sorterBy(sortBy) {
+const sorterBy = (sortBy) => {
     return sortBy || "user_id"
 };
 
-function sorterDirection(sortDirection) {
+const sorterDirection = (sortDirection) => {
     return sortDirection || "ASC"
 };
 
