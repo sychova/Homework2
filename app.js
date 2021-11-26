@@ -32,8 +32,9 @@ app.post("/users", (req, res) => {
 });
 
 // Get a specific User for Editing
-app.get("/users/:id", (req, res) => {
-    editUser(req.params.id, res);
+app.get("/users/:id", async (req, res) => {
+    const user = await editUser(req.params.id);
+    res.send(user);
 });
 
 // Update the User

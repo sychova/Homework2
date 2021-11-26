@@ -82,20 +82,21 @@ const deleteUser = (req, res) => {
     });
 };
 
-function editUser (req, res) {
+function editUser (id) {
+return new Promise((resolve, reject) => {
     pool.connect().then(() => {
         var sql = `SELECT *
         FROM dbo.users
         WHERE user_id = @user_id
         `;
         pool.request()
-            .input("user_id", mssql.Int, `${parseInt(req)}`)
+            .input("user_id", mssql.Int, `${parseInt(id)}`)
             .query(sql, (err, result) => {
-                res.send(result.recordset[0]);
+                resolve(result.recordset[0]);
             });
-            
         mssql.close();
     });
+})
 };
 
 function updateUser (req) {
