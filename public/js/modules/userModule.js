@@ -12,7 +12,7 @@ var userModule = (function() {
 
         // Users sorting
         var sorter = {
-            sorting: "UserID",
+            sorting: "user_id",
             order: "ASC"
         };
         var sortingRow = $("th").slice(0, 6);
@@ -46,7 +46,6 @@ var userModule = (function() {
 
         // Pagination
         $("#page-previous").on("click", function() {
-            console.log("Previous");
             var page_current = parseInt($("#page-current").text());
             if ((page_current - 1) > 0) {
                 $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
@@ -59,7 +58,6 @@ var userModule = (function() {
             }
         });
         $("#page-next").on("click", function() {
-            console.log("Next");
             var page_current = parseInt($("#page-current").text());
             $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
                 if (data.length > 0) {
@@ -185,15 +183,15 @@ var userModule = (function() {
         for (i = 0; i < data.length; i++) {
             usersRows += `
             <tr>
-                <td>${data[i].FirstName}</td>
-                <td>${data[i].LastName}</td>
-                <td>${data[i].Age}</td>
-                <td>${data[i].Phone}</td>
-                <td>${data[i].Email}</td>
-                <td>${data[i].Gender}</td>
+                <td>${data[i].first_name}</td>
+                <td>${data[i].last_name}</td>
+                <td>${data[i].age}</td>
+                <td>${data[i].phone}</td>
+                <td>${data[i].email}</td>
+                <td>${data[i].gender}</td>
                 <td>
-                    <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${data[i].UserID}">Edit</button>
-                    <button class="deleteUser btn btn-danger" data-userid="${data[i].UserID}">Delete</button>
+                    <button class="editUser btn btn-primary" type="button" data-toggle="modal" data-target="#usersModal" data-userid="${data[i].user_id}">Edit</button>
+                    <button class="deleteUser btn btn-danger" data-userid="${data[i].user_id}">Delete</button>
                 </td>
             </tr>`
         }

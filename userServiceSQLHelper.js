@@ -1,5 +1,5 @@
 function sorterBy(sortBy) {
-    return sortBy || "UserID"
+    return sortBy || "user_id"
 };
 
 function sorterDirection(sortDirection) {

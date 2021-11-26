@@ -1,9 +1,7 @@
-const mssql = require("mssql/msnodesqlv8");
-
 const config = {
     server: "(LocalDB)\\MSSQLLocalDB",
-    database: "Homework2",
-    port: "1433",
+    database: process.env.DB_INSTANCE,
+    port: process.env.DB_PORT,
     driver: "msnodesqlv8",
     options: {
         trustedConnection: true
@@ -11,3 +9,5 @@ const config = {
 };
 
 module.exports.config = config;
+
+// DB_SERVER='(LocalDB)\\MSSQLLocalDB'

@@ -6,7 +6,7 @@ const pool = new mssql.ConnectionPool(dbConfig.config);
 
 function paginateUsers(req, res) {
     pool.connect(() => {
-        var sql = "SELECT * FROM dbo.Users";
+        var sql = "SELECT * FROM dbo.users";
         pool.query(sql, function(err, result) {
             var page = req;
             var limit = 5;
@@ -26,8 +26,8 @@ function getUsers(req, res) {
         if (req.filter) {
             var sql = `
             SELECT *
-            FROM dbo.Users
-            WHERE FirstName LIKE @Search OR LastName LIKE @Search OR Age LIKE @Search OR Phone LIKE @Search OR Email LIKE @Search OR Gender LIKE @Search
+            FROM dbo.users
+            WHERE first_name LIKE @Search OR last_name LIKE @Search OR age LIKE @Search OR phone LIKE @Search OR email LIKE @Search OR gender LIKE @Search
             ORDER BY ${sortBy} ${sortDirection}
             OFFSET @Offset ROWS
             FETCH FIRST @Size ROWS ONLY
@@ -35,7 +35,7 @@ function getUsers(req, res) {
         } else {
             var sql = `
             SELECT *
-            FROM dbo.Users
+            FROM dbo.users
             ORDER BY ${sortBy} ${sortDirection}
             OFFSET @Offset ROWS
             FETCH FIRST @Size ROWS ONLY
@@ -54,17 +54,17 @@ function getUsers(req, res) {
 
 function createUser(req, res) {
     var sql = `
-    INSERT INTO dbo.Users (FirstName, LastName, Age, Phone, Email, Gender)
-    VALUES (@FirstName, @LastName, @Age, @Phone, @Email, @Gender)
+    INSERT INTO dbo.users (first_name, last_name, age, phone, email, gender)
+    VALUES (@first_name, @last_name, @age, @phone, @email, @gender)
     `;
     pool.connect().then(() => {
         pool.request()
-            .input("FirstName", mssql.VarChar, `${req.FirstName}`)
-            .input("LastName", mssql.VarChar, `${req.LastName}`)
-            .input("Age", mssql.VarChar, `${req.Age}`)
-            .input("Phone", mssql.VarChar, `${req.Phone}`)
-            .input("Email", mssql.VarChar, `${req.Email}`)
-            .input("Gender", mssql.VarChar, `${req.Gender}`)
+            .input("first_name", mssql.VarChar, `${req.FirstName}`)
+            .input("last_name", mssql.VarChar, `${req.LastName}`)
+            .input("age", mssql.VarChar, `${req.Age}`)
+            .input("phone", mssql.VarChar, `${req.Phone}`)
+            .input("email", mssql.VarChar, `${req.Email}`)
+            .input("gender", mssql.VarChar, `${req.Gender}`)
             .query(sql);
     });
 };
@@ -72,11 +72,11 @@ function createUser(req, res) {
 function deleteUser(req, res) {
     pool.connect().then(() => {
         var sql = `
-        DELETE FROM dbo.Users
-        WHERE UserID = @UserID
+        DELETE FROM dbo.users
+        WHERE user_id = @user_id
         `;
         pool.request()
-            .input("UserID", mssql.Int, `${parseInt(req)}`)
+            .input("user_id", mssql.Int, `${parseInt(req)}`)
             .query(sql);
         mssql.close();
     });
@@ -85,11 +85,11 @@ function deleteUser(req, res) {
 function editUser(req, res) {
     pool.connect().then(() => {
         var sql = `SELECT *
-        FROM dbo.Users
-        WHERE UserID = @UserID
+        FROM dbo.users
+        WHERE user_id = @user_id
         `;
         pool.request()
-            .input("UserID", mssql.Int, `${parseInt(req)}`)
+            .input("user_id", mssql.Int, `${parseInt(req)}`)
             .query(sql, function(err, result) {
                 res.send(result.recordset[0]);
             });
@@ -100,23 +100,23 @@ function editUser(req, res) {
 function updateUser(req) {
     pool.connect().then(() => {
         var sql = `
-        UPDATE dbo.Users SET
-        FirstName = @FirstName,
-        LastName = @LastName,
-        Age = @Age,
-        Phone = @Phone,
-        Email = @Email,
-        Gender = @Gender
-        WHERE UserID = @UserID
+        UPDATE dbo.users SET
+        first_name = @first_name,
+        last_name = @last_name,
+        age = @age,
+        phone = @phone,
+        email = @email,
+        gender = @gender
+        WHERE user_id = @user_id
         `;
         pool.request()
-            .input("UserID", mssql.Int, `${req.Id}`)
-            .input("FirstName", mssql.VarChar, `${req.FirstName}`)
-            .input("LastName", mssql.VarChar, `${req.LastName}`)
-            .input("Age", mssql.VarChar, `${req.Age}`)
-            .input("Phone", mssql.VarChar, `${req.Phone}`)
-            .input("Email", mssql.VarChar, `${req.Email}`)
-            .input("Gender", mssql.VarChar, `${req.Gender}`)
+            .input("user_id", mssql.Int, `${req.Id}`)
+            .input("first_name", mssql.VarChar, `${req.FirstName}`)
+            .input("last_name", mssql.VarChar, `${req.LastName}`)
+            .input("age", mssql.VarChar, `${req.Age}`)
+            .input("phone", mssql.VarChar, `${req.Phone}`)
+            .input("email", mssql.VarChar, `${req.Email}`)
+            .input("gender", mssql.VarChar, `${req.Gender}`)
             .query(sql);
         mssql.close();
     });
