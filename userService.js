@@ -7,7 +7,7 @@ const pool = new mssql.ConnectionPool(dbConfig.config);
 function paginateUsers(req, res) {
     pool.connect(() => {
         var sql = "SELECT * FROM dbo.users";
-        pool.query(sql, function(err, result) {
+        pool.query(sql, (err, result) => {
             var page = req;
             var limit = 5;
             var startIndex = (page - 1) * limit;
@@ -45,7 +45,7 @@ function getUsers(req, res) {
             .input("Search", mssql.VarChar, `%${req.filter}%`)
             .input("Offset", mssql.Int, `${(parseInt(req.page) - 1) * parseInt(req.size)}`)
             .input("Size", mssql.Int, `${parseInt(req.size)}`)
-            .query(sql, function(err, result) {
+            .query(sql, (err, result) => {
                 res.send(result.recordset);
             });
         mssql.close();
@@ -90,7 +90,7 @@ function editUser(req, res) {
         `;
         pool.request()
             .input("user_id", mssql.Int, `${parseInt(req)}`)
-            .query(sql, function(err, result) {
+            .query(sql, (err, result) => {
                 res.send(result.recordset[0]);
             });
         mssql.close();

@@ -13,44 +13,44 @@ app.use(express.static('public'));
 
 const port = process.env.PORT
 
-app.get("/", function(req, res) {
+app.get("/", (req, res) => {
     res.render("index.pug");
 });
 
 // Get Users
-app.get("/users", function(req, res) {
+app.get("/users", (req, res) => {
     getUsers(req.query, res);
 });
 
 // Create a User
-app.post("/users", function(req, res) {
-    res.sendStatus(201);
-    req.on('data', function(c) {
+app.post("/users", (req, res) => {
+    req.on('data', (c) => {
         var objectUser = JSON.parse(c.toString());
         createUser(objectUser);
     });
+    res.send(201);
 });
 
 // Get a specific User for Editing
-app.get("/users/:id", function(req, res) {
+app.get("/users/:id", (req, res) => {
     editUser(req.params.id, res);
 });
 
 // Update the User
-app.patch("/users/:id", function(req, res) {
+app.patch("/users/:id", (req, res) => {
     res.sendStatus(200);
-    req.on('data', function(c) {
+    req.on('data', (c) => {
         var objectUser = JSON.parse(c.toString());
         updateUser(objectUser);
     });
 });
 
 // Delete a User
-app.delete("/users/:id", function(req, res) {
+app.delete("/users/:id", (req, res) => {
     res.sendStatus(200);
     deleteUser(req.params.id, res);
 });
 
-app.listen(port, function() {
+app.listen(port, (req, res) => {
     console.log(`App listening on port ${port}`);
 });

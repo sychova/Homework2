@@ -1,12 +1,12 @@
-var userModule = (function() {
-    var initEvents = function() {
+var userModule = (() => {
+    var initEvents = () => {
         // User registration
-        $("#register").on("click", function() {
+        $("#register").on("click", () => {
             $("#modal-title").text("New User");
             $("#addUser").show();
             $("#updateUser").hide();
         });
-        $("#usersCenter").on("click", function(req, res) {
+        $("#usersCenter").on("click", (req, res) => {
             window.location.replace("/usersCenter");
         });
 
@@ -16,11 +16,11 @@ var userModule = (function() {
             order: "ASC"
         };
         var sortingRow = $("th").slice(0, 6);
-        var sortUsers = function(e) {
+        var sortUsers = (e) => {
             $("#page-current").text("1");
             sorter.sorting = $(e.target).attr("data-dbName");
             sorter.order = $(e.target).attr("data-sortingOrder");
-            $.get(`/users?page=1&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
+            $.get(`/users?page=1&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
                 if ($(e.target).attr("data-sortingOrder") === "ASC") {
                     $(e.target).attr("data-sortingOrder", "DESC");
                 } else {
@@ -30,25 +30,25 @@ var userModule = (function() {
                 initTableEvents();
             });
         }
-        sortingRow.on("click", function(e) {
+        sortingRow.on("click", (e) => {
             sortUsers(e);
         });
 
         // Search
-        $("#Search").on("keyup", function() {
+        $("#Search").on("keyup", () => {
             $("#page-current").text("1");
             var page_current = parseInt($("#page-current").text());
-            $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
+            $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
                 $("#users").html(tableBuilder(data));
                 initTableEvents();
             });
         });
 
         // Pagination
-        $("#page-previous").on("click", function() {
+        $("#page-previous").on("click", () => {
             var page_current = parseInt($("#page-current").text());
             if ((page_current - 1) > 0) {
-                $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
+                $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
                     if (data.length > 0) {
                         $("#users").html(tableBuilder(data));
                         initTableEvents();
@@ -57,9 +57,9 @@ var userModule = (function() {
                 });
             }
         });
-        $("#page-next").on("click", function() {
+        $("#page-next").on("click", () => {
             var page_current = parseInt($("#page-current").text());
-            $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, function(data) {
+            $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
                 if (data.length > 0) {
                     $("#users").html(tableBuilder(data));
                     initTableEvents();
@@ -70,9 +70,9 @@ var userModule = (function() {
     }
 
     // Users getter
-    var getUsers = function() {
+    var getUsers = () => {
         var page_current = parseInt($("#page-current").text());
-        $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, function(data) {
+        $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, (data) => {
             if (data.length === 0) {
                 if ((page_current - 1) > 0) {
                     $("#page-current").text(page_current - 1);
@@ -83,14 +83,14 @@ var userModule = (function() {
             initTableEvents();
         });
     }
-    var initTableEvents = function() {
+    var initTableEvents = () => {
         var userDelete = $(".deleteUser");
         for (var i = 0; i < userDelete.length; i++) {
-            $(userDelete[i]).on("click", function() {
+            $(userDelete[i]).on("click", function () {
                 $.ajax({
                     url: `/users/${$(this).attr("data-userid")}`,
                     type: 'DELETE',
-                    success: function() {
+                    success: () => {
                         getUsers();
                     }
                 });
@@ -98,44 +98,44 @@ var userModule = (function() {
         };
         var userEdit = $(".editUser");
         for (var i = 0; i < userEdit.length; i++) {
-            $(userEdit[i]).on("click", function() {
+            $(userEdit[i]).on("click", function () {
                 var userID = $(this).attr("data-userid");
                 $("#modal-title").text("Edit User");
                 $("#addUser").hide();
                 $("#updateUser").show();
                 $("#updateUser").attr("data-userid", userID);
-                $.get(`/users/${$(this).attr("data-userid")}`, function(data) {
-                    $("#FirstNameI").val(data.FirstName);
-                    $("#LastNameI").val(data.LastName);
-                    $("#AgeI").val(data.Age);
-                    $("#PhoneI").val(data.Phone);
-                    $("#EmailI").val(data.Email);
-                    $("#GenderI").val(data.Gender);
+                $.get(`/users/${$(this).attr("data-userid")}`, (data) => {
+                    $("#FirstNameI").val(data.first_name);
+                    $("#LastNameI").val(data.last_name);
+                    $("#AgeI").val(data.age);
+                    $("#PhoneI").val(data.phone);
+                    $("#EmailI").val(data.email);
+                    $("#GenderI").val(data.gender);
                 });
             });
         }
     }
-    var initModalEvents = function() {
-        $("#formReset").on("click", function() {
+    var initModalEvents = () => {
+        $("#formReset").on("click", () => {
             modalReset();
         });
         var formReset = $(".close, .modal-close");
         for (var i = 0; i <= formReset.length; i++) {
-            $(formReset[i]).on("click", function() {
+            $(formReset[i]).on("click", () => {
                 modalReset();
             });
         };
 
-        $("#addUser").on("click", function() {
+        $("#addUser").on("click", () => {
             var objectUser = modalRead();
             var data = JSON.stringify(objectUser);
-            $.post("/users", data, function() {
+            $.post("/users", data, () => {
                 getUsers();
                 modalReset();
             });
         });
 
-        $("#updateUser").on("click", function() {
+        $("#updateUser").on("click", () => {
             var userID = $(this).attr("data-userid");
             var objectUser = modalRead(userID);
 
@@ -144,7 +144,7 @@ var userModule = (function() {
                 type: 'PATCH',
                 url: `/users/${$(this).attr("data-userid")}`,
                 data,
-                success: function() {
+                success: () => {
                     getUsers();
                     modalReset();
                 }
@@ -152,12 +152,12 @@ var userModule = (function() {
         });
     }
 
-    var modalReset = function() {
+    var modalReset = () => {
         $("#userForm").trigger("reset");
         $(".validationWarning").text = "";
     }
 
-    var modalValidate = function() {
+    var modalValidate = () => {
         //form = $("#userForm");
         if ($("#userForm").isValid()) {
             return true;
@@ -166,7 +166,7 @@ var userModule = (function() {
         }
     }
 
-    var modalRead = function(userID) {
+    var modalRead = (userID) => {
         var objectUser = {};
         objectUser.Id = userID;
         objectUser.FirstName = $("#FirstNameI").val();
@@ -178,7 +178,7 @@ var userModule = (function() {
         return objectUser;
     }
 
-    var tableBuilder = function(data) {
+    var tableBuilder = (data) => {
         var usersRows = "";
         for (i = 0; i < data.length; i++) {
             usersRows += `
@@ -197,7 +197,7 @@ var userModule = (function() {
         }
         return usersRows;
     }
-    var init = function() {
+    var init = () => {
         initEvents();
         getUsers();
         initModalEvents();

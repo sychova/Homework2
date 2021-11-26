@@ -1,5 +1,5 @@
 const config = {
-    server: '(LocalDB)\MSSQLLocalDB',
+    server: process.env.DB_SERVER,
     database: process.env.DB_INSTANCE,
     port: process.env.DB_PORT,
     driver: "msnodesqlv8",
