@@ -2,10 +2,10 @@
     "name": "userlist_crud_extended",
     "version": "1.0.0",
     "description": "",
-    "main": "app.js",
+    "main": "index.js",
     "scripts": {
-        "start": "node app.js",
-        "dev": "env-cmd config/dev.env nodemon app.js"
+        "start": "node index.js",
+        "dev": "env-cmd config/dev.env nodemon index.js"
     },
     "keywords": [],
     "author": "",

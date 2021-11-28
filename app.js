@@ -11,8 +11,6 @@ const {
 app.use(express.static('public'))
 app.use(express.json());
 
-const port = process.env.PORT
-
 app.get("/", (req, res) => {
     res.render("index.pug")
 })
@@ -70,6 +68,4 @@ app.delete("/users/:id", async (req, res) => {
     }
 })
 
-app.listen(port, (req, res) => {
-    console.log(`App listening on port ${port}`)
-})
+module.exports = app
