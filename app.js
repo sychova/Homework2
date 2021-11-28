@@ -12,12 +12,8 @@ app.use(express.static('public'))
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
-
-
- 
 // create application/json parser
 var jsonParser = bodyParser.json()
-
 
 const port = process.env.PORT
 
