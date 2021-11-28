@@ -42,27 +42,27 @@ var userModule = (() => {
         });
 
         // Pagination
-        $("#page-previous").on("click", () => {
+        $("#page-previous").on("click", async () => {
             var page_current = parseInt($("#page-current").text());
             if ((page_current - 1) > 0) {
-                $.get(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
-                    if (data.length > 0) {
-                        $("#users").html(tableBuilder(data));
+                const response = await fetch(`/users?filter=${$("#Search").val()}&page=${page_current - 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`)
+                const users = await response.json()
+                    if (users.length > 0) {
+                        $("#users").html(tableBuilder(users));
                         initTableEvents();
                         $("#page-current").text(`${page_current - 1}`);
                     }
-                });
             }
         });
-        $("#page-next").on("click", () => {
+        $("#page-next").on("click", async () => {
             var page_current = parseInt($("#page-current").text());
-            $.get(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
-                if (data.length > 0) {
-                    $("#users").html(tableBuilder(data));
-                    initTableEvents();
-                    $("#page-current").text(`${page_current + 1}`);
-                }
-            });
+            const response = await fetch(`/users?filter=${$("#Search").val()}&page=${page_current + 1}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`)
+            const users = await response.json()
+            if (users.length > 0) {
+                $("#users").html(tableBuilder(users));
+                initTableEvents();
+                $("#page-current").text(`${page_current + 1}`);
+            }
         });
     }
 
