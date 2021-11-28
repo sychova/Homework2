@@ -151,7 +151,6 @@ var userModule = (() => {
 
     var modalReset = () => {
         $("#userForm").trigger("reset")
-        $(".validationWarning").text = ""
     }
 
     var modalRead = (userID) => {
