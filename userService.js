@@ -19,37 +19,39 @@ const paginateUsers = (req, res) => {
     });
 };
 
-const getUsers = (req, res) => {
-    var sortBy = sorterBy(req.sorting);
-    var sortDirection = sorterDirection(req.order);
-    pool.connect().then(() => {
-        if (req.filter) {
-            var sql = `
-            SELECT *
-            FROM dbo.users
-            WHERE first_name LIKE @Search OR last_name LIKE @Search OR age LIKE @Search OR phone LIKE @Search OR email LIKE @Search OR gender LIKE @Search
-            ORDER BY ${sortBy} ${sortDirection}
-            OFFSET @Offset ROWS
-            FETCH FIRST @Size ROWS ONLY
-            `;
-        } else {
-            var sql = `
-            SELECT *
-            FROM dbo.users
-            ORDER BY ${sortBy} ${sortDirection}
-            OFFSET @Offset ROWS
-            FETCH FIRST @Size ROWS ONLY
-            `;
-        }
-        pool.request()
-            .input("Search", mssql.VarChar, `%${req.filter}%`)
-            .input("Offset", mssql.Int, `${(parseInt(req.page) - 1) * parseInt(req.size)}`)
-            .input("Size", mssql.Int, `${parseInt(req.size)}`)
-            .query(sql, (err, result) => {
-                res.send(result.recordset);
-            });
-        mssql.close();
-    });
+const getUsers = (order) => {
+    return new Promise ((resolve, reject) => {
+        var sortBy = sorterBy(order.sorting);
+        var sortDirection = sorterDirection(order.order);
+        pool.connect().then(() => {
+            if (order.filter) {
+                var sql = `
+                SELECT *
+                FROM dbo.users
+                WHERE first_name LIKE @Search OR last_name LIKE @Search OR age LIKE @Search OR phone LIKE @Search OR email LIKE @Search OR gender LIKE @Search
+                ORDER BY ${sortBy} ${sortDirection}
+                OFFSET @Offset ROWS
+                FETCH FIRST @Size ROWS ONLY
+                `;
+            } else {
+                var sql = `
+                SELECT *
+                FROM dbo.users
+                ORDER BY ${sortBy} ${sortDirection}
+                OFFSET @Offset ROWS
+                FETCH FIRST @Size ROWS ONLY
+                `;
+            }
+            pool.request()
+                .input("Search", mssql.VarChar, `%${order.filter}%`)
+                .input("Offset", mssql.Int, `${(parseInt(order.page) - 1) * parseInt(order.size)}`)
+                .input("Size", mssql.Int, `${parseInt(order.size)}`)
+                .query(sql, (err, result) => {
+                    resolve(result.recordset);
+                });
+            mssql.close();
+        });
+    })
 };
 
 const createUser = (user) => {

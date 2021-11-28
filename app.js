@@ -27,8 +27,13 @@ app.get("/", (req, res) => {
 });
 
 // Get Users
-app.get("/users", (req, res) => {
-    getUsers(req.query, res);
+app.get("/users", async (req, res) => {
+    try {
+        const data = await getUsers(req.query);
+        res.status(201).send(data);
+    } catch (error) {
+        res.status(500).send(error)
+    }
 });
 
 // Create a User
@@ -37,7 +42,7 @@ app.post("/users", jsonParser, async (req, res) => {
         await createUser(req.body);
         res.status(201).send();
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 });
 

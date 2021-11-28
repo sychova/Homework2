@@ -67,18 +67,18 @@ var userModule = (() => {
     }
 
     // Users getter
-    var getUsers = () => {
+    var getUsers = async () => {
         var page_current = parseInt($("#page-current").text());
-        $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`, (data) => {
-            if (data.length === 0) {
-                if ((page_current - 1) > 0) {
-                    $("#page-current").text(page_current - 1);
-                    getUsers(page_current - 1);
-                }
+        const response = await fetch(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5`)
+        const users = await response.json()
+        if (users.length === 0) {
+            if ((page_current - 1) > 0) {
+                $("#page-current").text(page_current - 1);
+                getUsers(page_current - 1);
             }
-            $("#users").html(tableBuilder(data));
-            initTableEvents();
-        });
+        }
+        $("#users").html(tableBuilder(users));
+        initTableEvents();
     }
     var initTableEvents = () => {
         var userDelete = $(".deleteUser");
