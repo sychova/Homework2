@@ -163,15 +163,6 @@ var userModule = (() => {
         $(".validationWarning").text = "";
     }
 
-    var modalValidate = () => {
-        //form = $("#userForm");
-        if ($("#userForm").isValid()) {
-            return true;
-        } else {
-            $(".validationWarning").text("Your form is not valid. Please revise your data.");
-        }
-    }
-
     var modalRead = (userID) => {
         var objectUser = {};
         objectUser.Id = userID;
