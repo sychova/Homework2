@@ -5,8 +5,7 @@ const {
     deleteUser,
     editUser,
     updateUser,
-    createUser,
-    paginateUsers
+    createUser
 } = require("./userService");
 
 app.use(express.static('public'));

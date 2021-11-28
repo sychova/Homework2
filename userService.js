@@ -4,21 +4,6 @@ const { sorterBy, sorterDirection } = require("./userServiceSQLHelper");
 
 const pool = new mssql.ConnectionPool(dbConfig.config);
 
-const paginateUsers = (req, res) => {
-    pool.connect(() => {
-        var sql = "SELECT * FROM dbo.users";
-        pool.query(sql, (err, result) => {
-            var page = req;
-            var limit = 5;
-            var startIndex = (page - 1) * limit;
-            var endIndex = page * limit;
-            var resultUsers = result.recordset.slice(startIndex, endIndex);
-            res.send(resultUsers);
-        });
-        mssql.close();
-    });
-};
-
 const getUsers = (order) => {
     return new Promise ((resolve, reject) => {
         var sortBy = sorterBy(order.sorting);
@@ -141,6 +126,5 @@ module.exports = {
     deleteUser,
     editUser,
     updateUser,
-    createUser,
-    paginateUsers
+    createUser
 }
