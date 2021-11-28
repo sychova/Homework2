@@ -75,17 +75,20 @@ const createUser = (user) => {
     })
 };
 
-const deleteUser = (req, res) => {
-    pool.connect().then(() => {
-        var sql = `
-        DELETE FROM dbo.users
-        WHERE user_id = @user_id
-        `;
-        pool.request()
-            .input("user_id", mssql.Int, `${parseInt(req)}`)
-            .query(sql);
-        mssql.close();
-    });
+const deleteUser = (userID) => {
+    return new Promise ((resolve, reject) => {
+        pool.connect().then(() => {
+            var sql = `
+            DELETE FROM dbo.users
+            WHERE user_id = @user_id
+            `;
+            pool.request()
+                .input("user_id", mssql.Int, `${parseInt(userID)}`)
+                .query(sql);
+            mssql.close();
+        });
+        resolve()
+    })
 };
 
 function editUser (id) {

@@ -70,9 +70,13 @@ app.patch("/users/:id", jsonParser, async (req, res) => {
 });
 
 // Delete a User
-app.delete("/users/:id", (req, res) => {
-    res.sendStatus(200);
-    deleteUser(req.params.id, res);
+app.delete("/users/:id", async (req, res) => {
+    try {
+        await deleteUser(req.params.id);
+        res.status(200).send()
+    } catch (error) {
+        res.status(500).send(error);
+    }
 });
 
 app.listen(port, (req, res) => {
