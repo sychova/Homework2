@@ -98,20 +98,20 @@ var userModule = (() => {
         };
         var userEdit = $(".editUser");
         for (var i = 0; i < userEdit.length; i++) {
-            $(userEdit[i]).on("click", function () {
+            $(userEdit[i]).on("click", async function () {
                 var userID = $(this).attr("data-userid");
                 $("#modal-title").text("Edit User");
                 $("#addUser").hide();
                 $("#updateUser").show();
                 $("#updateUser").attr("data-userid", userID);
-                $.get(`/users/${$(this).attr("data-userid")}`, (data) => {
-                    $("#FirstNameI").val(data.first_name);
-                    $("#LastNameI").val(data.last_name);
-                    $("#AgeI").val(data.age);
-                    $("#PhoneI").val(data.phone);
-                    $("#EmailI").val(data.email);
-                    $("#GenderI").val(data.gender);
-                });
+                const response = await fetch(`/users/${$(this).attr("data-userid")}`);
+                const user = await response.json()
+                $("#FirstNameI").val(user.first_name);
+                $("#LastNameI").val(user.last_name);
+                $("#AgeI").val(user.age);
+                $("#PhoneI").val(user.phone);
+                $("#EmailI").val(user.email);
+                $("#GenderI").val(user.gender);
             });
         }
     }
@@ -126,13 +126,17 @@ var userModule = (() => {
             });
         };
 
-        $("#addUser").on("click", () => {
+        $("#addUser").on("click", async() => {
             var objectUser = modalRead();
-            var data = JSON.stringify(objectUser);
-            $.post("/users", data, () => {
-                getUsers();
-                modalReset();
+            await fetch('/users', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objectUser)
             });
+            getUsers();
+            modalReset();
         });
 
         $("#updateUser").on("click", function () {

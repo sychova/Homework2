@@ -10,6 +10,15 @@ const {
 } = require("./userService");
 
 app.use(express.static('public'));
+var bodyParser = require('body-parser')
+app.use(bodyParser.json())
+
+
+
+ 
+// create application/json parser
+var jsonParser = bodyParser.json()
+
 
 const port = process.env.PORT
 
@@ -23,18 +32,26 @@ app.get("/users", (req, res) => {
 });
 
 // Create a User
-app.post("/users", (req, res) => {
-    req.on('data', (c) => {
-        var objectUser = JSON.parse(c.toString());
-        createUser(objectUser);
-    });
-    res.send(201);
+app.post("/users", jsonParser, async (req, res) => {
+    try {
+        await createUser(req.body);
+        res.status(201).send();
+    } catch (error) {
+        res.status(400).send(error)
+    }
 });
 
 // Get a specific User for Editing
 app.get("/users/:id", async (req, res) => {
-    const user = await editUser(req.params.id);
-    res.send(user);
+    try {
+        const user = await editUser(req.params.id);
+        if (!user) {
+            return res.status(404).send()
+        }
+        res.send(user);
+    } catch (error) {
+        res.status(500).send(error)
+    }
 });
 
 // Update the User

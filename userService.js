@@ -52,21 +52,24 @@ const getUsers = (req, res) => {
     });
 };
 
-const createUser = (req, res) => {
-    var sql = `
-    INSERT INTO dbo.users (first_name, last_name, age, phone, email, gender)
-    VALUES (@first_name, @last_name, @age, @phone, @email, @gender)
-    `;
-    pool.connect().then(() => {
-        pool.request()
-            .input("first_name", mssql.VarChar, `${req.FirstName}`)
-            .input("last_name", mssql.VarChar, `${req.LastName}`)
-            .input("age", mssql.VarChar, `${req.Age}`)
-            .input("phone", mssql.VarChar, `${req.Phone}`)
-            .input("email", mssql.VarChar, `${req.Email}`)
-            .input("gender", mssql.VarChar, `${req.Gender}`)
-            .query(sql);
-    });
+const createUser = (user) => {
+    return new Promise((resolve, reject) => {
+        var sql = `
+        INSERT INTO dbo.users (first_name, last_name, age, phone, email, gender)
+        VALUES (@first_name, @last_name, @age, @phone, @email, @gender)
+        `;
+        pool.connect().then(() => {
+            pool.request()
+                .input("first_name", mssql.VarChar, `${user.FirstName}`)
+                .input("last_name", mssql.VarChar, `${user.LastName}`)
+                .input("age", mssql.VarChar, `${user.Age}`)
+                .input("phone", mssql.VarChar, `${user.Phone}`)
+                .input("email", mssql.VarChar, `${user.Email}`)
+                .input("gender", mssql.VarChar, `${user.Gender}`)
+                .query(sql);
+        });
+        resolve()
+    })
 };
 
 const deleteUser = (req, res) => {
