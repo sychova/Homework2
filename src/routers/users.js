@@ -6,7 +6,7 @@ const {
     editUser,
     updateUser,
     createUser
-} = require("../userService")
+} = require("../utils/userService")
 
 router.get("/", (req, res) => {
     res.render("index.pug")
