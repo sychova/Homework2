@@ -84,14 +84,11 @@ var userModule = (() => {
     var initTableEvents = () => {
         var userDelete = $(".deleteUser");
         for (var i = 0; i < userDelete.length; i++) {
-            $(userDelete[i]).on("click", function () {
-                $.ajax({
-                    url: `/users/${$(this).attr("data-userid")}`,
-                    type: 'DELETE',
-                    success: () => {
-                        getUsers();
-                    }
-                });
+            $(userDelete[i]).on("click", async function () {
+                await fetch(`/users/${$(this).attr("data-userid")}`, {
+                    method: 'DELETE'
+                })
+                getUsers();
             });
         };
         var userEdit = $(".editUser");
