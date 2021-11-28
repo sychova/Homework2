@@ -1,8 +1,8 @@
 const mssql = require("mssql/msnodesqlv8")
-const dbConfig = require("./dbconfig")
+const { config } = require("./dbconfig")
 const { sorterBy, sorterDirection } = require("./userServiceSQLHelper")
 
-const pool = new mssql.ConnectionPool(dbConfig.config)
+const pool = new mssql.ConnectionPool(config)
 
 const getUsers = (order) => {
     return new Promise ((resolve, reject) => {
