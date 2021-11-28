@@ -1,13 +1,13 @@
-const mssql = require("mssql/msnodesqlv8");
-const dbConfig = require("./dbconfig");
-const { sorterBy, sorterDirection } = require("./userServiceSQLHelper");
+const mssql = require("mssql/msnodesqlv8")
+const dbConfig = require("./dbconfig")
+const { sorterBy, sorterDirection } = require("./userServiceSQLHelper")
 
-const pool = new mssql.ConnectionPool(dbConfig.config);
+const pool = new mssql.ConnectionPool(dbConfig.config)
 
 const getUsers = (order) => {
     return new Promise ((resolve, reject) => {
-        var sortBy = sorterBy(order.sorting);
-        var sortDirection = sorterDirection(order.order);
+        var sortBy = sorterBy(order.sorting)
+        var sortDirection = sorterDirection(order.order)
         pool.connect().then(() => {
             if (order.filter) {
                 var sql = `
@@ -17,7 +17,7 @@ const getUsers = (order) => {
                 ORDER BY ${sortBy} ${sortDirection}
                 OFFSET @Offset ROWS
                 FETCH FIRST @Size ROWS ONLY
-                `;
+                `
             } else {
                 var sql = `
                 SELECT *
@@ -25,26 +25,26 @@ const getUsers = (order) => {
                 ORDER BY ${sortBy} ${sortDirection}
                 OFFSET @Offset ROWS
                 FETCH FIRST @Size ROWS ONLY
-                `;
+                `
             }
             pool.request()
                 .input("Search", mssql.VarChar, `%${order.filter}%`)
                 .input("Offset", mssql.Int, `${(parseInt(order.page) - 1) * parseInt(order.size)}`)
                 .input("Size", mssql.Int, `${parseInt(order.size)}`)
                 .query(sql, (err, result) => {
-                    resolve(result.recordset);
-                });
-            mssql.close();
-        });
+                    resolve(result.recordset)
+                })
+            mssql.close()
+        })
     })
-};
+}
 
 const createUser = (user) => {
     return new Promise((resolve, reject) => {
         var sql = `
         INSERT INTO dbo.users (first_name, last_name, age, phone, email, gender)
         VALUES (@first_name, @last_name, @age, @phone, @email, @gender)
-        `;
+        `
         pool.connect().then(() => {
             pool.request()
                 .input("first_name", mssql.VarChar, `${user.FirstName}`)
@@ -53,12 +53,12 @@ const createUser = (user) => {
                 .input("phone", mssql.VarChar, `${user.Phone}`)
                 .input("email", mssql.VarChar, `${user.Email}`)
                 .input("gender", mssql.VarChar, `${user.Gender}`)
-                .query(sql);
-            mssql.close();
-        });
+                .query(sql)
+            mssql.close()
+        })
         resolve()
     })
-};
+}
 
 const deleteUser = (userID) => {
     return new Promise ((resolve, reject) => {
@@ -66,15 +66,15 @@ const deleteUser = (userID) => {
             var sql = `
             DELETE FROM dbo.users
             WHERE user_id = @user_id
-            `;
+            `
             pool.request()
                 .input("user_id", mssql.Int, `${parseInt(userID)}`)
-                .query(sql);
-            mssql.close();
-        });
+                .query(sql)
+            mssql.close()
+        })
         resolve()
     })
-};
+}
 
 function editUser (id) {
     return new Promise((resolve, reject) => {
@@ -82,16 +82,16 @@ function editUser (id) {
             var sql = `SELECT *
             FROM dbo.users
             WHERE user_id = @user_id
-            `;
+            `
             pool.request()
                 .input("user_id", mssql.Int, `${parseInt(id)}`)
                 .query(sql, (err, result) => {
-                    resolve(result.recordset[0]);
-                });
-            mssql.close();
-        });
+                    resolve(result.recordset[0])
+                })
+            mssql.close()
+        })
     })
-};
+}
 
 function updateUser (user) {
     return new Promise((resolve, reject) => {
@@ -105,7 +105,7 @@ function updateUser (user) {
             email = @email,
             gender = @gender
             WHERE user_id = @user_id
-            `;
+            `
             pool.request()
                 .input("user_id", mssql.Int, `${user.Id}`)
                 .input("first_name", mssql.VarChar, `${user.FirstName}`)
@@ -114,12 +114,12 @@ function updateUser (user) {
                 .input("phone", mssql.VarChar, `${user.Phone}`)
                 .input("email", mssql.VarChar, `${user.Email}`)
                 .input("gender", mssql.VarChar, `${user.Gender}`)
-                .query(sql);
-            mssql.close();
-        });
+                .query(sql)
+            mssql.close()
+        })
         resolve()
     })
-};
+}
 
 module.exports = {
     getUsers,

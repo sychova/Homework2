@@ -6,6 +6,6 @@ const config = {
     options: {
         trustedConnection: true
     }
-};
+}
 
-module.exports.config = config;
+module.exports.config = config
