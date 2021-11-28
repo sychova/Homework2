@@ -32,13 +32,13 @@ var userModule = (() => {
         });
 
         // Search
-        $("#Search").on("keyup", () => {
+        $("#Search").on("keyup", async () => {
             $("#page-current").text("1");
             var page_current = parseInt($("#page-current").text());
-            $.get(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
-                $("#users").html(tableBuilder(data));
-                initTableEvents();
-            });
+            const response = await fetch(`/users?filter=${$("#Search").val()}&page=${page_current}&size=5&sorting=${sorter.sorting}&order=${sorter.order}`)
+            const users = await response.json()
+            $("#users").html(tableBuilder(users));
+            initTableEvents();
         });
 
         // Pagination
