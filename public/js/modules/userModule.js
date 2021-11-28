@@ -155,13 +155,13 @@ var userModule = (() => {
 
     var modalRead = (userID) => {
         var objectUser = {}
-        objectUser.Id = userID
-        objectUser.FirstName = $("#FirstNameI").val()
-        objectUser.LastName = $("#LastNameI").val()
-        objectUser.Age = $("#AgeI").val()
-        objectUser.Phone = $("#PhoneI").val()
-        objectUser.Email = $("#EmailI").val()
-        objectUser.Gender = $("#GenderI").val()
+        objectUser.id = userID
+        objectUser.firstName = $("#FirstNameI").val()
+        objectUser.lastName = $("#LastNameI").val()
+        objectUser.age = $("#AgeI").val()
+        objectUser.phone = $("#PhoneI").val()
+        objectUser.email = $("#EmailI").val()
+        objectUser.gender = $("#GenderI").val()
         return objectUser
     }
 

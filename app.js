@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 app.get("/users", async (req, res) => {
     try {
         const data = await getUsers(req.query)
-        res.status(201).send(data)
+        res.status(200).send(data)
     } catch (error) {
         res.status(500).send(error)
     }
