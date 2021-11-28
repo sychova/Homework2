@@ -60,12 +60,13 @@ app.get("/users/:id", async (req, res) => {
 });
 
 // Update the User
-app.patch("/users/:id", (req, res) => {
-    res.sendStatus(200);
-    req.on('data', (c) => {
-        var objectUser = JSON.parse(c.toString());
-        updateUser(objectUser);
-    });
+app.patch("/users/:id", jsonParser, async (req, res) => {
+    try {
+        await updateUser(req.body);
+        res.status(200).send()
+    } catch (error) {
+        res.status(500).send(error)
+    }
 });
 
 // Delete a User

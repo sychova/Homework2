@@ -69,6 +69,7 @@ const createUser = (user) => {
                 .input("email", mssql.VarChar, `${user.Email}`)
                 .input("gender", mssql.VarChar, `${user.Gender}`)
                 .query(sql);
+            mssql.close();
         });
         resolve()
     })
@@ -88,45 +89,48 @@ const deleteUser = (req, res) => {
 };
 
 function editUser (id) {
-return new Promise((resolve, reject) => {
-    pool.connect().then(() => {
-        var sql = `SELECT *
-        FROM dbo.users
-        WHERE user_id = @user_id
-        `;
-        pool.request()
-            .input("user_id", mssql.Int, `${parseInt(id)}`)
-            .query(sql, (err, result) => {
-                resolve(result.recordset[0]);
-            });
-        mssql.close();
-    });
-})
+    return new Promise((resolve, reject) => {
+        pool.connect().then(() => {
+            var sql = `SELECT *
+            FROM dbo.users
+            WHERE user_id = @user_id
+            `;
+            pool.request()
+                .input("user_id", mssql.Int, `${parseInt(id)}`)
+                .query(sql, (err, result) => {
+                    resolve(result.recordset[0]);
+                });
+            mssql.close();
+        });
+    })
 };
 
-function updateUser (req) {
-    pool.connect().then(() => {
-        var sql = `
-        UPDATE dbo.users SET
-        first_name = @first_name,
-        last_name = @last_name,
-        age = @age,
-        phone = @phone,
-        email = @email,
-        gender = @gender
-        WHERE user_id = @user_id
-        `;
-        pool.request()
-            .input("user_id", mssql.Int, `${req.Id}`)
-            .input("first_name", mssql.VarChar, `${req.FirstName}`)
-            .input("last_name", mssql.VarChar, `${req.LastName}`)
-            .input("age", mssql.VarChar, `${req.Age}`)
-            .input("phone", mssql.VarChar, `${req.Phone}`)
-            .input("email", mssql.VarChar, `${req.Email}`)
-            .input("gender", mssql.VarChar, `${req.Gender}`)
-            .query(sql);
-        mssql.close();
-    });
+function updateUser (user) {
+    return new Promise((resolve, reject) => {
+        pool.connect().then(() => {
+            var sql = `
+            UPDATE dbo.users SET
+            first_name = @first_name,
+            last_name = @last_name,
+            age = @age,
+            phone = @phone,
+            email = @email,
+            gender = @gender
+            WHERE user_id = @user_id
+            `;
+            pool.request()
+                .input("user_id", mssql.Int, `${user.Id}`)
+                .input("first_name", mssql.VarChar, `${user.FirstName}`)
+                .input("last_name", mssql.VarChar, `${user.LastName}`)
+                .input("age", mssql.VarChar, `${user.Age}`)
+                .input("phone", mssql.VarChar, `${user.Phone}`)
+                .input("email", mssql.VarChar, `${user.Email}`)
+                .input("gender", mssql.VarChar, `${user.Gender}`)
+                .query(sql);
+            mssql.close();
+        });
+        resolve()
+    })
 };
 
 module.exports = {

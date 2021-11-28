@@ -134,20 +134,27 @@ var userModule = (() => {
             modalReset();
         });
 
-        $("#updateUser").on("click", function () {
+        $("#updateUser").on("click", async function () {
             var userID = $(this).attr("data-userid");
             var objectUser = modalRead(userID);
-
-            var data = JSON.stringify(objectUser);
-            $.ajax({
-                type: 'PATCH',
-                url: `/users/${$(this).attr("data-userid")}`,
-                data,
-                success: () => {
-                    getUsers();
-                    modalReset();
-                }
-            });
+            // $.ajax({
+            //     type: 'PATCH',
+            //     url: `/users/${$(this).attr("data-userid")}`,
+            //     data,
+            //     success: () => {
+            //         getUsers();
+            //         modalReset();
+            //     }
+            // });
+            await fetch(`/users/${$(this).attr("data-userid")}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objectUser)
+            })
+            getUsers();
+            modalReset();
         });
     }
 
