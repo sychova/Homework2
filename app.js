@@ -9,11 +9,7 @@ const {
 } = require("./userService")
 
 app.use(express.static('public'))
-var bodyParser = require('body-parser')
-app.use(bodyParser.json())
-
-// create application/json parser
-var jsonParser = bodyParser.json()
+app.use(express.json());
 
 const port = process.env.PORT
 
@@ -32,7 +28,7 @@ app.get("/users", async (req, res) => {
 })
 
 // Create a User
-app.post("/users", jsonParser, async (req, res) => {
+app.post("/users", async (req, res) => {
     try {
         await createUser(req.body)
         res.status(201).send()
@@ -55,7 +51,7 @@ app.get("/users/:id", async (req, res) => {
 })
 
 // Update the User
-app.patch("/users/:id", jsonParser, async (req, res) => {
+app.patch("/users/:id", async (req, res) => {
     try {
         await updateUser(req.body)
         res.status(200).send()
