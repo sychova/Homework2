@@ -1,23 +1,19 @@
 const express = require('express')
-require('dotenv').config()
-const app = express()
+const router = new express.Router()
 const {
     getUsers,
     deleteUser,
     editUser,
     updateUser,
     createUser
-} = require("./userService")
+} = require("../userService")
 
-app.use(express.static('public'))
-app.use(express.json());
-
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
     res.render("index.pug")
 })
 
 // Get Users
-app.get("/users", async (req, res) => {
+router.get("/users", async (req, res) => {
     try {
         const data = await getUsers(req.query)
         res.status(200).send(data)
@@ -27,7 +23,7 @@ app.get("/users", async (req, res) => {
 })
 
 // Create a User
-app.post("/users", async (req, res) => {
+router.post("/users", async (req, res) => {
     try {
         await createUser(req.body)
         res.status(201).send()
@@ -37,7 +33,7 @@ app.post("/users", async (req, res) => {
 })
 
 // Get a specific User for Editing
-app.get("/users/:id", async (req, res) => {
+router.get("/users/:id", async (req, res) => {
     try {
         const user = await editUser(req.params.id)
         if (!user) {
@@ -50,7 +46,7 @@ app.get("/users/:id", async (req, res) => {
 })
 
 // Update the User
-app.patch("/users/:id", async (req, res) => {
+router.patch("/users/:id", async (req, res) => {
     try {
         await updateUser(req.body)
         res.status(200).send()
@@ -60,7 +56,7 @@ app.patch("/users/:id", async (req, res) => {
 })
 
 // Delete a User
-app.delete("/users/:id", async (req, res) => {
+router.delete("/users/:id", async (req, res) => {
     try {
         await deleteUser(req.params.id)
         res.status(200).send()
@@ -69,4 +65,4 @@ app.delete("/users/:id", async (req, res) => {
     }
 })
 
-module.exports = app
+module.exports = router
