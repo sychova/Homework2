@@ -6,9 +6,6 @@ var userModule = (() => {
             $("#addUser").show();
             $("#updateUser").hide();
         });
-        $("#usersCenter").on("click", (req, res) => {
-            window.location.replace("/usersCenter");
-        });
 
         // Users sorting
         var sorter = {
