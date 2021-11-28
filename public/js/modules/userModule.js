@@ -13,19 +13,19 @@ var userModule = (() => {
             order: "ASC"
         };
         var sortingRow = $("th").slice(0, 6);
-        var sortUsers = (e) => {
+        var sortUsers = async (event) => {
             $("#page-current").text("1");
-            sorter.sorting = $(e.target).attr("data-dbName");
-            sorter.order = $(e.target).attr("data-sortingOrder");
-            $.get(`/users?page=1&size=5&sorting=${sorter.sorting}&order=${sorter.order}`, (data) => {
-                if ($(e.target).attr("data-sortingOrder") === "ASC") {
-                    $(e.target).attr("data-sortingOrder", "DESC");
-                } else {
-                    $(e.target).attr("data-sortingOrder", "ASC");
-                }
-                $("#users").html(tableBuilder(data));
-                initTableEvents();
-            });
+            sorter.sorting = $(event.target).attr("data-dbName");
+            sorter.order = $(event.target).attr("data-sortingOrder");
+            const response = await fetch(`/users?page=1&size=5&sorting=${sorter.sorting}&order=${sorter.order}`)
+            const users = await response.json()
+            if ($(event.target).attr("data-sortingOrder") === "ASC") {
+                $(event.target).attr("data-sortingOrder", "DESC");
+            } else {
+                $(event.target).attr("data-sortingOrder", "ASC");
+            }
+            $("#users").html(tableBuilder(users));
+            initTableEvents();
         }
         sortingRow.on("click", (e) => {
             sortUsers(e);
@@ -80,6 +80,7 @@ var userModule = (() => {
         $("#users").html(tableBuilder(users));
         initTableEvents();
     }
+    
     var initTableEvents = () => {
         var userDelete = $(".deleteUser");
         for (var i = 0; i < userDelete.length; i++) {
