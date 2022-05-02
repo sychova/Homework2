@@ -1,8 +1,23 @@
 {
-  "dependencies": {
-    "express": "^4.17.1",
-    "msnodesqlv8": "^2.4.1",
-    "mssql": "^7.2.1",
-    "pug": "^3.0.2"
-  }
+    "name": "userlist_crud_extended",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "nodemon src/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "msnodesqlv8": "^2.4.1",
+        "mssql": "^7.2.1",
+        "pug": "^3.0.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15"
+    }
 }
