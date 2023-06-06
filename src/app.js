@@ -1,11 +1,17 @@
-const express = require('express')
-require('dotenv').config()
-const userRouter = require('./routers/users')
+const express = require("express");
+require("dotenv").config();
 
-const app = express()
+const userRouter = require("./routes/users");
 
-app.use(express.static('public'))
+const app = express();
+
+app.use(express.static("public"));
 app.use(express.json());
-app.use(userRouter)
 
-module.exports = app
+router.get("/", (req, res) => {
+  res.render("index.pug");
+});
+
+app.use("/users", userRouter);
+
+module.exports = app;
